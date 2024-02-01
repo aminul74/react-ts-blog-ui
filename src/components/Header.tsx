@@ -10,7 +10,7 @@ type ListItemProps = {
 const ListItem: React.FC<ListItemProps> = ({ NavLink = "/", children }) => (
   <Link
     to={NavLink}
-    className="flex py-2 text-base font-medium text-xl text-white hover:text-dark dark:text-dark-6 dark:hover:text-white lg:ml-12 lg:inline-flex"
+    className="flex py-2 font-medium text-xl text-white hover:text-dark dark:text-dark-6 dark:hover:text-white lg:ml-12 lg:inline-flex"
   >
     {children}
   </Link>
@@ -20,7 +20,7 @@ const Navbar: React.FC = () => {
   const [user, setUser] = useState<boolean>(true);
   return (
     <header
-      className={`flex w-full items-center bg-indigo-900 dark:bg-dark fixed top-0 left-0 w-full z-50`}
+      className={`flex items-center bg-indigo-900 dark:bg-dark fixed top-0 left-0 w-full z-50`}
     >
       <div className="container mx-auto px-5">
         <div className="relative -mx-4 flex items-center justify-between">
@@ -54,7 +54,7 @@ const Navbar: React.FC = () => {
               >
                 <div className="block lg:flex text-xl text-white">
                   <ListItem NavLink="/">Home</ListItem>
-                  <ListItem NavLink="/#">Blog</ListItem>
+                  <ListItem NavLink="/blogs">Blog</ListItem>
                   <ListItem NavLink="/about">About</ListItem>
                 </div>
               </nav>
