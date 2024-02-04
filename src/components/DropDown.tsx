@@ -1,28 +1,64 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
+import { useAuth } from "../contextApi/useAuth";
+import Button from "./Button";
 
-const UserProfileDropdown: React.FC = () => {
+type DropDownProps = {
+  userLabel?: string;
+  userEmail?: string;
+};
+
+const UserProfileDropdown: React.FC<DropDownProps> = () => {
+  const { user, logout } = useAuth();
+  const userEmail = user?.email || "";
+  const userLabel = user?.username || "";
   const [isDropdownOpen, setDropdownOpen] = useState<boolean>(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const toggleDropdown = () => {
     setDropdownOpen(!isDropdownOpen);
   };
+  const handleLogout = () => {
+    logout();
+  };
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      dropdownRef.current
+        ? !dropdownRef.current.contains(event.target as Node) &&
+          setDropdownOpen(false)
+        : null;
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [dropdownRef]);
 
   return (
-    <div className="relative">
+    <div className="relative mb-5" ref={dropdownRef}>
       <button
         id="dropdownAvatarNameButton"
         data-dropdown-toggle="dropdownAvatarName"
-        className="flex items-center text-sm pe-1 font-medium text-gray-900 rounded-full hover:text-blue-600 dark:hover:text-blue-500 md:me-0 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:text-white"
+        className="flex items-center text-sm pe-1 font-medium text-white rounded-full hover:text-slate-300 md:me-0 transition transform hover:-translate-y-0.5"
         type="button"
         onClick={toggleDropdown}
       >
-        {/* <span className="sr-only">Open user menu</span> */}
-        <img
-          className="w-8 h-8 me-2 rounded-full"
-          src="src/assets/user.png"
-          alt="user photo"
-        />
-        Aminul
+        <div className="relative w-6 h-6 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600 mr-5">
+          <svg
+            className="absolute w-6 h-7 text-gray-400"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fillRule="evenodd"
+              d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+            ></path>
+          </svg>
+        </div>
+        <span className="top-0 left-5 absolute w-2.5 h-2.5 bg-green-400 border-2 border-white dark:border-gray-800 rounded-full"></span>
+        {userLabel}
         <svg
           className="w-2.5 h-2.5 ms-3"
           aria-hidden="true"
@@ -40,7 +76,6 @@ const UserProfileDropdown: React.FC = () => {
         </svg>
       </button>
 
-      {/* Dropdown menu */}
       <div
         id="dropdownAvatarName"
         className={`z-10 ${
@@ -48,45 +83,39 @@ const UserProfileDropdown: React.FC = () => {
         } bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600 absolute top-full right-0 mt-1`}
       >
         <div className="px-4 py-3 text-sm text-gray-900 dark:text-white">
-          <div className="font-medium">Pro User</div>
-          <div className="truncate">name@flowbite.com</div>
+          <div className="font-medium">Wellcome!</div>
+          <div className="truncate">{userEmail}</div>
         </div>
         <ul
           className="py-2 text-sm text-gray-700 dark:text-gray-200"
           aria-labelledby="dropdownAvatarNameButton"
         >
           <li>
-            <a
-              href="#"
+            <Link
+              to="#"
               className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
             >
-              Dashboard
-            </a>
+              MyBlogs
+            </Link>
           </li>
           <li>
-            <a
-              href="#"
+            <Link
+              to={"/profile"}
+              onClick={() => setDropdownOpen(false)}
               className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
             >
-              Settings
-            </a>
-          </li>
-          <li>
-            <a
-              href="#"
-              className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-            >
-              Earnings
-            </a>
+              Profile
+            </Link>
           </li>
         </ul>
         <div className="py-2">
-          <a
-            href="#"
+          <Button
+            type="button"
+            onClick={handleLogout}
             className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
           >
             Sign out
-          </a>
+          </Button>
         </div>
       </div>
     </div>

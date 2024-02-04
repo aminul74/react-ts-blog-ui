@@ -9,6 +9,7 @@ import SignInPage from "./pages/SignInPage";
 import SignupPage from "./pages/SignupPage";
 import Accordion from "./components/BlogCard";
 import BlogDetails from "./pages/BlogDetails";
+import ProfilePage from "./pages/ProfilePage";
 
 function App() {
   return (
@@ -16,9 +17,10 @@ function App() {
       <Header />
       <Routes>
         <Route path="/" element={<HeroSection />} />
-        <Route path="/about" element={<AboutSection />} />
         <Route path="/signin" element={<SignInPage />} />
         <Route path="/signup" element={<SignupPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/about" element={<AboutSection />} />
         <Route path="/:uuid" element={<BlogDetails />} />
         <Route path="/blogs" element={<Accordion />} />
       </Routes>

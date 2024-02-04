@@ -7,7 +7,8 @@ import { useMutation } from "@tanstack/react-query";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { signUpSchema } from "../utility/userFormValidation";
 import { signInSchema } from "../utility/userFormValidation";
-
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../contextApi/useAuth";
 interface FormData {
   username: string;
   email: string;
@@ -20,6 +21,8 @@ type UserFormProps = {
 };
 
 const UserForm: React.FC<UserFormProps> = ({ isSignIn, isSignUp }) => {
+  const navigate = useNavigate();
+  const { login, getUser } = useAuth();
   const schema = isSignIn ? signInSchema : signUpSchema;
   const {
     register,
@@ -39,6 +42,13 @@ const UserForm: React.FC<UserFormProps> = ({ isSignIn, isSignUp }) => {
     onError: (error: Error) => {
       console.error("Error during signInMutate:", error);
     },
+    onSuccess: async (data) => {
+      const { token } = data[0];
+      const userInfo = await getUser(token);
+      const user = userInfo.data[0];
+      login(token, user);
+      navigate("/");
+    },
   });
 
   const { mutate: signUpMutate } = useMutation<
@@ -48,6 +58,17 @@ const UserForm: React.FC<UserFormProps> = ({ isSignIn, isSignUp }) => {
   >({
     mutationKey: ["signUp"],
     mutationFn: async (data: FormData) => api.signUpFetch(data),
+    onError: (error: Error) => {
+      console.error("Error during signInMutate:", error);
+    },
+    onSuccess: async (data) => {
+      const { token } = data[0];
+      const userInfo = await getUser(token);
+      const user = userInfo.data[0];
+      console.log("TTTTT", user, token);
+      login(token, user);
+      navigate("/");
+    },
   });
 
   const onSubmit: SubmitHandler<FormData> = (data) => {

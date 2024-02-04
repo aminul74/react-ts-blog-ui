@@ -2,6 +2,7 @@ import axios from "axios";
 
 const BASE_URL_SIGNIN = "http://localhost:4001/api/v1/auth/login";
 const BASE_URL_SIGNUP = "http://localhost:4001/api/v1/auth/register";
+const BASE_URL_UPDATE = "http://localhost:4001/api/v1/users/:uuId";
 
 export type apiResponseType = {
   token: string;
@@ -11,11 +12,19 @@ type apirequestType = {
   email: string;
   password: string;
 };
+
+type updateApiType = {
+  old_password: string;
+  new_password: string;
+  confirm_password: string;
+  token: string;
+};
+
 const signInFetch = async ({
   username,
   password,
 }: apirequestType): Promise<apiResponseType> => {
-  console.log("1")
+  // console.log("1")
   try {
     const response = await axios.post(
       BASE_URL_SIGNIN,
@@ -42,7 +51,7 @@ const signUpFetch = async ({
   email,
   password,
 }: apirequestType): Promise<apiResponseType> => {
-  console.log("CALLED")
+  // console.log("CALLED")
   try {
     const response = await axios.post(
       BASE_URL_SIGNUP,
@@ -65,4 +74,32 @@ const signUpFetch = async ({
   }
 };
 
-export default { signUpFetch, signInFetch };
+const updatePasswordFetch = async ({
+  old_password,
+  new_password,
+  token,
+}: updateApiType): Promise<boolean> => {
+  console.log("DDDDDDDDD", token);
+  try {
+    const response = await axios.put(
+      BASE_URL_UPDATE,
+      {
+        old_password,
+        new_password,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
+        },
+      }
+    );
+    console.log("SignUP", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching", error);
+    throw error;
+  }
+};
+
+export default { signUpFetch, signInFetch, updatePasswordFetch };

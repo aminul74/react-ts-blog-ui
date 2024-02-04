@@ -18,7 +18,7 @@ const posts = [
     },
   },
   {
-    id: 1,
+    id: 2,
     title: "Boost your conversion rate",
     description:
       "Illo sint voluptas. Error voluptates culpa eligendi. Hic vel totam vitae illo. Non aliquid explicabo necessitatibus unde. Sed exercitationem placeat consectetur nulla deserunt vel. Iusto corrupti dicta.",
@@ -34,7 +34,7 @@ const posts = [
     },
   },
   {
-    id: 1,
+    id: 3,
     title: "Boost your conversion rate",
     description:
       "Illo sint voluptas. Error voluptates culpa eligendi. Hic vel totam vitae illo. Non aliquid explicabo necessitatibus unde. Sed exercitationem placeat consectetur nulla deserunt vel. Iusto corrupti dicta.",

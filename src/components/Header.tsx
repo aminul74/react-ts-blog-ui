@@ -1,23 +1,11 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import ListItem from "./NavListItem";
 import DropDown from "../components/DropDown";
+import { useAuth } from "../contextApi/useAuth";
 
-type ListItemProps = {
-  NavLink: string;
-  children: React.ReactNode;
-};
-
-const ListItem: React.FC<ListItemProps> = ({ NavLink = "/", children }) => (
-  <Link
-    to={NavLink}
-    className="flex py-2 font-medium text-xl text-white hover:text-dark dark:text-dark-6 dark:hover:text-white lg:ml-12 lg:inline-flex"
-  >
-    {children}
-  </Link>
-);
 const Navbar: React.FC = () => {
+  const { token } = useAuth();
   const [open, setOpen] = useState<boolean>(false);
-  const [user, setUser] = useState<boolean>(true);
   return (
     <header
       className={`flex items-center bg-indigo-900 dark:bg-dark fixed top-0 left-0 w-full z-50`}
@@ -53,18 +41,19 @@ const Navbar: React.FC = () => {
                 } `}
               >
                 <div className="block lg:flex text-xl text-white">
-                  <ListItem NavLink="/">Home</ListItem>
-                  <ListItem NavLink="/blogs">Blog</ListItem>
-                  <ListItem NavLink="/about">About</ListItem>
+                  <ListItem to="/">Home</ListItem>
+                  <ListItem to="/blogs">Blog</ListItem>
+                  <ListItem to="/about">About</ListItem>
                 </div>
               </nav>
             </div>
-            {user && <div className="hidden justify-end pr-16 sm:flex lg:pr-0">
-              <ListItem NavLink="/signin">Sign in</ListItem>
-
-              <ListItem NavLink="/signup">Sign Up</ListItem>
-            </div>}
-            <DropDown />
+            {!token && (
+              <div className="hidden justify-end pr-16 sm:flex lg:pr-0">
+                <ListItem to="/signin">Sign In</ListItem>
+                <ListItem to="/signup">Sign Up</ListItem>
+              </div>
+            )}
+            {token && <DropDown />}
           </div>
         </div>
       </div>
