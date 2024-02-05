@@ -7,7 +7,7 @@ import AboutSection from "./pages/AboutPage";
 // import UserForm from "./components/UserForm";
 import SignInPage from "./pages/SignInPage";
 import SignupPage from "./pages/SignupPage";
-import Accordion from "./components/BlogCard";
+import BlogCard from "./components/BlogCard";
 import BlogDetails from "./pages/BlogDetails";
 import ProfilePage from "./pages/ProfilePage";
 
@@ -21,8 +21,8 @@ function App() {
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/about" element={<AboutSection />} />
-        <Route path="/:uuid" element={<BlogDetails />} />
-        <Route path="/blogs" element={<Accordion />} />
+        <Route path="/blog/:uuid" element={<BlogDetails />} />
+        <Route path="/blogs" element={<BlogCard />} />
       </Routes>
       <Footer />
     </Router>

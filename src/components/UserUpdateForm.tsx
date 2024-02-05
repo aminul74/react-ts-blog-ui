@@ -2,12 +2,12 @@ import React from "react";
 import Button from "./Button";
 import InputField from "./InputField";
 import { SubmitHandler, useForm } from "react-hook-form";
-import api from "../utility/userApi";
+import api from "../utility/userApis";
 import { useMutation } from "@tanstack/react-query";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useAuth } from "../contextApi/useAuth";
+import { useAuth } from "../contextApi/UseAuthContext";
 import { useNavigate } from "react-router-dom";
-import {schema} from "../utility/userUpdateFormValidation";
+import { schema } from "../utility/userUpdateFormValidation";
 interface UpdatePasswordDataType {
   old_password: string;
   new_password: string;

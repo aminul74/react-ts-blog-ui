@@ -1,58 +1,46 @@
 import React from "react";
-// import { useParams } from "react-router";
-const posts = [
-  {
-    id: 1,
-    title: "Boost your conversion rate",
-    description:
-      "Illo sint voluptas. Error voluptates culpa eligendi. Hic vel totam vitae illo. Non aliquid explicabo necessitatibus unde. Sed exercitationem placeat consectetur nulla deserunt vel. Iusto corrupti dicta.",
-    date: "Mar 16, 2020",
-    datetime: "2020-03-16",
-    category: { title: "Marketing", href: "#" },
-    author: {
-      name: "aminul",
-      role: "bloger",
-      href: "#",
-      imageUrl:
-        "https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-    },
-  },
-  {
-    id: 2,
-    title: "Boost your conversion rate",
-    description:
-      "Illo sint voluptas. Error voluptates culpa eligendi. Hic vel totam vitae illo. Non aliquid explicabo necessitatibus unde. Sed exercitationem placeat consectetur nulla deserunt vel. Iusto corrupti dicta.",
-    date: "Mar 16, 2020",
-    datetime: "2020-03-16",
-    category: { title: "Marketing", href: "#" },
-    author: {
-      name: "Michael Foster",
-      role: "Bloger",
-      href: "#",
-      imageUrl:
-        "https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-    },
-  },
-  {
-    id: 3,
-    title: "Boost your conversion rate",
-    description:
-      "Illo sint voluptas. Error voluptates culpa eligendi. Hic vel totam vitae illo. Non aliquid explicabo necessitatibus unde. Sed exercitationem placeat consectetur nulla deserunt vel. Iusto corrupti dicta.",
-    date: "Mar 16, 2020",
-    datetime: "2020-03-16",
-    category: { title: "Marketing", href: "#" },
-    author: {
-      name: "Michael Foster",
-      role: "Bloger",
-      href: "#",
-      imageUrl:
-        "https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-    },
-  },
-];
+import { useQuery } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
+import { PropagateLoader } from "react-spinners";
+import { fetchBlogs } from "../utility/blogApis";
+import { useBlogContext } from "../contextApi/UseBlogContext";
+import { dateFormatter } from "../utility/tools";
+import Button from "./Button";
+import Paginate from "./Paginate";
 
-const BlogCard: React.FC = () => {
-  //   const uuId = useParams();
+interface BlogCardProps {
+  pageSize?: number;
+}
+const BlogCard: React.FC<BlogCardProps> = ({
+  pageSize,
+}: BlogCardProps) => {
+
+  const navigate = useNavigate();
+  const { pageNumber, setPageNumber } = useBlogContext();
+  const nextPage = pageNumber + 1;
+  const blogPerPage = 6;
+  
+  const { data, isLoading } = useQuery({
+    queryKey: ["blogs", pageNumber, pageSize],
+    queryFn: async () => fetchBlogs({ page: nextPage, pageSize: blogPerPage }),
+    staleTime: 16000,
+  });
+
+  const blogs = data ? data[0] : [];
+  const totalCount = data ? data[1] : [];
+
+  const changePage = (data: { selected: number }) => {
+    setPageNumber(data.selected);
+  };
+
+  if (isLoading) {
+    return (
+      <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-gray-800 bg-opacity-75 z-50">
+        <PropagateLoader color="#312E81" loading={isLoading} />
+      </div>
+    );
+  }
+
   return (
     <div className="bg-white py-24 sm:py-32 min-h-screen">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
@@ -65,46 +53,63 @@ const BlogCard: React.FC = () => {
           </p>
         </div>
         <div className="mx-auto mt-10 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 border-t border-gray-200 pt-10 sm:mt-16 sm:pt-16 lg:mx-0 lg:max-w-none lg:grid-cols-3">
-          {posts.map((post) => (
+          {blogs.map((blog) => (
             <article
-              key={post.id}
-              className="flex max-w-xl flex-col items-start justify-between bg-slate-100 p-10 rounded"
+              key={blog.id}
+              className="flex max-w-xl flex-col items-start justify-between bg-slate-100 p-10 rounded hover:bg-indigo-100 transition transform hover:-translate-y-0.5"
             >
-              <div className="flex items-center gap-x-4 text-xs">
-                <time dateTime={post.datetime} className="text-gray-500">
-                  {post.date}
-                </time>
-                <div className="relative rounded-full bg-gray-50 px-3 py-1.5 font-medium text-gray-600 hover:bg-gray-100">
-                  {post.category.title}
-                </div>
-              </div>
-              <div className="group relative">
-                <h3 className="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
-                  <div>{post.title}</div>
-                </h3>
-                <div className="mt-5 line-clamp-3 text-md leading-6 text-gray-600">
-                  {post.description}
-                </div>
-              </div>
-              <div className="relative mt-8 flex items-center gap-x-4">
-                <img
-                  src={post.author.imageUrl}
-                  alt=""
-                  className="h-6 w-6 rounded-full bg-gray-50"
-                />
-                <div className="text-xs leading-4">
-                  <div className="font-semibold text-gray-900 underline">
-                    <div>{post.author.name}</div>
+              <div className="relative mt-8 flex flex-col items-start gap-y-4">
+                <div className="flex items-center justify-between w-full">
+                  <div className="flex items-center gap-x-4 text-xs">
+                    <time className="text-gray-700">
+                      {dateFormatter(blog.createdAt)}
+                    </time>
+                    <div className="relative rounded-full bg-gray-50 px-3 py-1.5 font-medium text-gray-500 hover:bg-gray-100">
+                      {"published"}
+                    </div>
                   </div>
-                  <p className="text-gray-600">{post.author.role}</p>
                 </div>
-                <button className="text-black text-sm ml-20 bg-slate-200 p-2 rounded">
-                  See more...
-                </button>
+                <div className="group relative">
+                  <h3 className="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600 line-clamp-1">
+                    <div>{blog.title}</div>
+                  </h3>
+                  <div className="mt-5 line-clamp-3 text-md leading-6 text-gray-900">
+                    {blog.content}
+                  </div>
+                </div>
+                <div className="flex items-center justify-between w-full">
+                  <div className="text-xs leading-4">
+                    <div className="font-semibold text-gray-900 underline">
+                      <div>
+                        <img
+                          src={"src/assets/user.png"}
+                          alt=""
+                          className="h-6 w-6 rounded-full bg-gray-50"
+                        />
+                        {blog.User.username}
+                      </div>
+                    </div>
+                    <p className="text-gray-600">{"bloger"}</p>
+                  </div>
+                  <Button
+                    className="inline-flex px-4 py-2 text-md font-medium text-black hover:bg-gray-300"
+                    type={"button"}
+                    onClick={() => navigate(`/blog/${blog.id}`)}
+                  >
+                    {"See more..."}
+                  </Button>
+                </div>
               </div>
             </article>
           ))}
         </div>
+      </div>
+      <div>
+        <Paginate
+          pageNumber={pageNumber}
+          totalCount={totalCount}
+          changePage={changePage}
+        />
       </div>
     </div>
   );

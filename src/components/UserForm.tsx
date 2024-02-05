@@ -1,14 +1,14 @@
 import React from "react";
 import InputField from "./InputField";
 import Button from "./Button";
-import api from "../utility/userApi";
+import api from "../utility/userApis";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { signUpSchema } from "../utility/userFormValidation";
 import { signInSchema } from "../utility/userFormValidation";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../contextApi/useAuth";
+import { useAuth } from "../contextApi/UseAuthContext";
 interface FormData {
   username: string;
   email: string;
@@ -148,7 +148,12 @@ const UserForm: React.FC<UserFormProps> = ({ isSignIn, isSignUp }) => {
             )}
 
             <div>
-              <Button type="submit">{isSignIn ? "Sign In" : "Sign Up"}</Button>
+              <Button
+                type="submit"
+                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              >
+                {isSignIn ? "Sign In" : "Sign Up"}
+              </Button>
             </div>
           </form>
 

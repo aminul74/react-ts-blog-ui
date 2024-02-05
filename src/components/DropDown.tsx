@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import { useAuth } from "../contextApi/useAuth";
+import { useAuth } from "../contextApi/UseAuthContext";
 import Button from "./Button";
 
 type DropDownProps = {
@@ -37,16 +37,16 @@ const UserProfileDropdown: React.FC<DropDownProps> = () => {
 
   return (
     <div className="relative mb-5" ref={dropdownRef}>
-      <button
+      <Button
         id="dropdownAvatarNameButton"
         data-dropdown-toggle="dropdownAvatarName"
-        className="flex items-center text-sm pe-1 font-medium text-white rounded-full hover:text-slate-300 md:me-0 transition transform hover:-translate-y-0.5"
+        className="flex items-center text-xl pe-1 font-medium text-white rounded-full hover:text-slate-300 md:me-0 transition transform hover:-translate-y-0.5 border border-white hover:bg-indigo-900"
         type="button"
         onClick={toggleDropdown}
       >
         <div className="relative w-6 h-6 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600 mr-5">
           <svg
-            className="absolute w-6 h-7 text-gray-400"
+            className="absolute w-6 h-8 text-gray-400"
             fill="currentColor"
             viewBox="0 0 20 20"
             xmlns="http://www.w3.org/2000/svg"
@@ -74,7 +74,7 @@ const UserProfileDropdown: React.FC<DropDownProps> = () => {
             d="m1 1 4 4 4-4"
           />
         </svg>
-      </button>
+      </Button>
 
       <div
         id="dropdownAvatarName"
@@ -110,9 +110,9 @@ const UserProfileDropdown: React.FC<DropDownProps> = () => {
         </ul>
         <div className="py-2">
           <Button
-            type="button"
+            type="submit"
             onClick={handleLogout}
-            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+            className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white w-full text-start"
           >
             Sign out
           </Button>

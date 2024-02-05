@@ -1,4 +1,4 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useState, SetStateAction } from "react";
 import axios, { AxiosResponse } from "axios";
 
 export interface UserType {
@@ -13,6 +13,8 @@ interface AuthContextType {
   logout: () => void;
   user: UserType | null;
   getUser: (token: string) => Promise<AxiosResponse<UserType>>;
+  setUser: React.Dispatch<SetStateAction<UserType | null>>;
+  setToken: React.Dispatch<SetStateAction<string | null>>;
 }
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -55,7 +57,9 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ token, login, logout, user, getUser }}>
+    <AuthContext.Provider
+      value={{ token, login, logout, user, getUser, setToken, setUser }}
+    >
       {children}
     </AuthContext.Provider>
   );
