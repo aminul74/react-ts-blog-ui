@@ -1,7 +1,7 @@
 import React from "react";
 import InputField from "./InputField";
 import Button from "./Button";
-import api, { apiResponseType } from "../utility/userApi";
+import api from "../utility/userApi";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -32,11 +32,7 @@ const UserForm: React.FC<UserFormProps> = ({ isSignIn, isSignUp }) => {
     resolver: yupResolver(schema) as never,
   });
 
-  const { mutate: signInMutate } = useMutation<
-    apiResponseType,
-    Error,
-    FormData
-  >({
+  const { mutate: signInMutate } = useMutation({
     mutationKey: ["signIn"],
     mutationFn: async (data: FormData) => api.signInFetch(data),
     onError: (error: Error) => {
@@ -51,11 +47,7 @@ const UserForm: React.FC<UserFormProps> = ({ isSignIn, isSignUp }) => {
     },
   });
 
-  const { mutate: signUpMutate } = useMutation<
-    apiResponseType,
-    Error,
-    FormData
-  >({
+  const { mutate: signUpMutate } = useMutation({
     mutationKey: ["signUp"],
     mutationFn: async (data: FormData) => api.signUpFetch(data),
     onError: (error: Error) => {

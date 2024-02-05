@@ -3,29 +3,19 @@ import Button from "./Button";
 import InputField from "./InputField";
 import { SubmitHandler, useForm } from "react-hook-form";
 import api from "../utility/userApi";
-import * as yup from "yup";
 import { useMutation } from "@tanstack/react-query";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useAuth } from "../contextApi/useAuth";
-
+import { useNavigate } from "react-router-dom";
+import {schema} from "../utility/userUpdateFormValidation";
 interface UpdatePasswordDataType {
   old_password: string;
   new_password: string;
   confirm_password: string;
-  token?: string | null;
 }
-
-const schema = yup.object().shape({
-  old_password: yup.string().required("Old Password is required"),
-  new_password: yup.string().required("New Password is required"),
-  confirm_password: yup
-    .string()
-    .oneOf([yup.ref("new_password")], "Passwords must match")
-    .required("Confirm Password is required"),
-});
-
 const UpdatePassword: React.FC<UpdatePasswordDataType> = () => {
-  const { user } = useAuth();
+  const { user, token, logout } = useAuth();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -35,11 +25,22 @@ const UpdatePassword: React.FC<UpdatePasswordDataType> = () => {
   });
 
   const { mutate: updataMutate } = useMutation({
-    mutationKey: ["updatePass", user?.id],
+    mutationKey: ["updatePass", user?.id, token || ""],
     mutationFn: async (data: UpdatePasswordDataType) =>
-      api.updatePasswordFetch(data),
+      api.updatePasswordFetch({
+        old_password: data.old_password,
+        new_password: data.new_password,
+        confirm_password: data.confirm_password,
+        userId: user?.id || "",
+        token: token || "",
+      }),
+    onSuccess: async () => {
+      logout();
+      navigate("/signin");
+    },
   });
   const onSubmit: SubmitHandler<UpdatePasswordDataType> = (data) => {
+    console.log("ONSUBMIT", data);
     updataMutate(data);
   };
   return (
