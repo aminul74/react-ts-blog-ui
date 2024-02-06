@@ -1,33 +1,33 @@
 import React from "react";
-import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { PropagateLoader } from "react-spinners";
-import { fetchBlogs } from "../utility/blogApis";
 import { useBlogContext } from "../contextApi/UseBlogContext";
 import { dateFormatter } from "../utility/tools";
 import Button from "./Button";
 import Paginate from "./Paginate";
 
+interface User {
+  username: string;
+}
+interface Blog {
+  id: number;
+  title: string;
+  content: string;
+  User: User;
+  createdAt: string;
+}
 interface BlogCardProps {
-  pageSize?: number;
+  blogs: Blog[];
+  totalCount: number;
+  isLoading: boolean;
 }
 const BlogCard: React.FC<BlogCardProps> = ({
-  pageSize,
+  blogs,
+  totalCount,
+  isLoading,
 }: BlogCardProps) => {
-
   const navigate = useNavigate();
   const { pageNumber, setPageNumber } = useBlogContext();
-  const nextPage = pageNumber + 1;
-  const blogPerPage = 6;
-  
-  const { data, isLoading } = useQuery({
-    queryKey: ["blogs", pageNumber, pageSize],
-    queryFn: async () => fetchBlogs({ page: nextPage, pageSize: blogPerPage }),
-    staleTime: 16000,
-  });
-
-  const blogs = data ? data[0] : [];
-  const totalCount = data ? data[1] : [];
 
   const changePage = (data: { selected: number }) => {
     setPageNumber(data.selected);

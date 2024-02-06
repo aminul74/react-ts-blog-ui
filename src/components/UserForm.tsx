@@ -9,6 +9,7 @@ import { signUpSchema } from "../utility/userFormValidation";
 import { signInSchema } from "../utility/userFormValidation";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contextApi/UseAuthContext";
+
 interface FormData {
   username: string;
   email: string;
