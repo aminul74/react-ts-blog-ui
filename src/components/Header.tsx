@@ -3,7 +3,7 @@ import ListItem from "./NavListItem";
 import DropDown from "../components/DropDown";
 import { useAuth } from "../contextApi/UseAuthContext";
 import Button from "./Button";
-
+import { Link } from "react-router-dom";
 const Navbar: React.FC = () => {
   const { token } = useAuth();
   const [open, setOpen] = useState<boolean>(false);
@@ -14,13 +14,13 @@ const Navbar: React.FC = () => {
       <div className="container mx-auto px-5">
         <div className="relative -mx-4 flex items-center justify-between">
           <div className="w-28 max-w-full px-4">
-            <a href="/#" className="block w-full py-5">
+            <Link to="/" className="block w-full py-5">
               <img
                 src="src/assets/logo.png"
                 alt="logo"
                 className="hidden dark:block"
               />
-            </a>
+            </Link>
           </div>
           <div className="flex w-full items-center justify-between px-4">
             <div>

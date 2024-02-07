@@ -12,7 +12,8 @@ import BlogPage from "./pages/BlogPage";
 import BlogDetails from "./pages/BlogDetails";
 import ProfilePage from "./pages/ProfilePage";
 // import Modal from "./components/Modal";
-import FloatButton from "./components/FloatButton";
+import BlogForm from "./components/BlogForm";
+// import FloatButton from "./components/FloatButton";
 
 function App() {
   return (
@@ -20,7 +21,7 @@ function App() {
       <Header />
       <Routes>
         <Route path="/" element={<HeroSection />} />
-        <Route path="/check" element={<FloatButton />} />
+        <Route path="/check" element={<BlogForm />} />
         <Route path="/signin" element={<SignInPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/profile" element={<ProfilePage />} />

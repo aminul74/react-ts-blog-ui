@@ -4,7 +4,7 @@ export interface BlogProps {
   page?: number;
   pageSize?: number;
   blog?: unknown;
-  token?: string;
+  token?: string |null;
   uuId?: string;
   updatedBlog?: unknown;
 }
@@ -16,7 +16,7 @@ export const fetchBlogs = async ({ page, pageSize }: BlogProps) => {
   return response.data;
 };
 
-export const createBlogMutation = async ({ blog, token }: BlogProps) => {
+export const createBlog = async ({ blog, token }: BlogProps) => {
   const response = await axios.post(
     "http://localhost:4001/api/v1/blogs/create",
     blog,

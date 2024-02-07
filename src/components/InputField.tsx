@@ -11,6 +11,7 @@ type InpuFieldProps = {
   required: boolean;
   // eslint-disable-next-line
   register: UseFormRegister<any>;
+  defaultValue?: string;
 };
 
 const InputField: React.FC<InpuFieldProps> = ({
@@ -22,6 +23,7 @@ const InputField: React.FC<InpuFieldProps> = ({
   placeholder,
   required,
   register,
+  defaultValue,
 }) => {
   return (
     <div className="mb-2">
@@ -34,8 +36,9 @@ const InputField: React.FC<InpuFieldProps> = ({
         autoComplete={autoComplete}
         placeholder={placeholder}
         required={required}
+        defaultValue={defaultValue}
         {...register(name, { required })}
-        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 pl-2"
+        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 pl-2 bg-white"
       />
     </div>
   );

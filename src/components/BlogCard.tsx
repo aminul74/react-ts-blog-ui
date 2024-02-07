@@ -1,31 +1,17 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { PropagateLoader } from "react-spinners";
+import { BeatLoader } from "react-spinners";
 import { useBlogContext } from "../contextApi/UseBlogContext";
 import { dateFormatter } from "../utility/tools";
 import Button from "./Button";
 import Paginate from "./Paginate";
+import { Blog, FetchBlogsResponse } from "../pages/BlogPage";
 
-interface User {
-  username: string;
-}
-interface Blog {
-  id: number;
-  title: string;
-  content: string;
-  User: User;
-  createdAt: string;
-}
-interface BlogCardProps {
-  blogs: Blog[];
-  totalCount: number;
-  isLoading: boolean;
-}
-const BlogCard: React.FC<BlogCardProps> = ({
+const BlogCard: React.FC<FetchBlogsResponse> = ({
   blogs,
   totalCount,
   isLoading,
-}: BlogCardProps) => {
+}) => {
   const navigate = useNavigate();
   const { pageNumber, setPageNumber } = useBlogContext();
 
@@ -36,7 +22,7 @@ const BlogCard: React.FC<BlogCardProps> = ({
   if (isLoading) {
     return (
       <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-gray-800 bg-opacity-75 z-50">
-        <PropagateLoader color="#312E81" loading={isLoading} />
+        <BeatLoader color="#312E81" loading={isLoading} />
       </div>
     );
   }
@@ -46,14 +32,14 @@ const BlogCard: React.FC<BlogCardProps> = ({
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-2xl lg:mx-0">
           <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-            From The Blog
+            Publish your passions, your way
           </h2>
           <p className="mt-2 text-lg leading-8 text-gray-600">
-            Learn how to grow your business with our expert advice.
+            Create a unique and beautiful blog easily.
           </p>
         </div>
         <div className="mx-auto mt-10 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 border-t border-gray-200 pt-10 sm:mt-16 sm:pt-16 lg:mx-0 lg:max-w-none lg:grid-cols-3">
-          {blogs.map((blog) => (
+          {blogs.map((blog: Blog) => (
             <article
               key={blog.id}
               className="flex max-w-xl flex-col items-start justify-between bg-slate-100 p-10 rounded hover:bg-indigo-100 transition transform hover:-translate-y-0.5"
