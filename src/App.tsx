@@ -4,16 +4,12 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import HeroSection from "./components/HeroSection";
 import AboutSection from "./pages/AboutPage";
-// import UserForm from "./components/UserForm";
 import SignInPage from "./pages/SignInPage";
 import SignupPage from "./pages/SignupPage";
-// import BlogCard from "./components/BlogCard";
 import BlogPage from "./pages/BlogPage";
 import BlogDetails from "./pages/BlogDetails";
 import ProfilePage from "./pages/ProfilePage";
-// import Modal from "./components/Modal";
-import BlogForm from "./components/BlogForm";
-// import FloatButton from "./components/FloatButton";
+// import BlogForm from "./components/BlogForm";
 
 function App() {
   return (
@@ -21,7 +17,7 @@ function App() {
       <Header />
       <Routes>
         <Route path="/" element={<HeroSection />} />
-        <Route path="/check" element={<BlogForm />} />
+        {/* <Route path="/check" element={<BlogForm />} /> */}
         <Route path="/signin" element={<SignInPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/profile" element={<ProfilePage />} />

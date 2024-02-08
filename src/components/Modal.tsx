@@ -21,7 +21,7 @@ const Modal: React.FC<ModalProps> = ({
       } h-full w-full overflow-y-auto overflow-x-hidden backdrop-blur-sm backdrop-filter backdrop-contrast-120 outline-none`}
     >
       <div className="relative w-auto mx-auto mt-20 max-w-[500px]">
-        <div className="shadow-[0_0.5rem_1rem_rgba(#000, 0.15)] relative flex flex-col rounded-md dark:bg-gray-600">
+        <div className="shadow-[0_0.5rem_1rem_rgba(#000, 0.15)] relative flex flex-col rounded-md bg-gray-800">
           <div className="flex-shrink-0 items-center justify-between rounded-t-md p-4 dark:border-opacity-50">
             <h5 className="text-xl font-medium leading-normal text-neutral-80">
               {title}

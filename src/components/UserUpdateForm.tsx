@@ -2,44 +2,45 @@ import React from "react";
 import Button from "./Button";
 import InputField from "./InputField";
 import { SubmitHandler, useForm } from "react-hook-form";
-import api from "../utility/userApis";
+import api, { ApiDataType } from "../utility/userApis";
 import { useMutation } from "@tanstack/react-query";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useAuth } from "../contextApi/UseAuthContext";
 import { useNavigate } from "react-router-dom";
 import { schema } from "../utility/userUpdateFormValidation";
-interface UpdatePasswordDataType {
-  old_password: string;
-  new_password: string;
-  confirm_password: string;
-}
-const UpdatePassword: React.FC<UpdatePasswordDataType> = () => {
+
+// interface UpdatePasswordDataType {
+//   old_password: string;
+//   new_password: string;
+//   confirmPassword: string;
+// }
+const UpdatePassword: React.FC<ApiDataType> = () => {
   const { user, token, logout } = useAuth();
   const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<UpdatePasswordDataType>({
-    resolver: yupResolver(schema),
+  } = useForm<ApiDataType>({
+    resolver: yupResolver(schema) as never,
   });
 
   const { mutate: updataMutate } = useMutation({
     mutationKey: ["updatePass", user?.id, token || ""],
-    mutationFn: async (data: UpdatePasswordDataType) =>
+    mutationFn: async (data: ApiDataType) =>
       api.updatePasswordFetch({
         old_password: data.old_password,
         new_password: data.new_password,
-        confirm_password: data.confirm_password,
-        userId: user?.id || "",
-        token: token || "",
+        confirmPassword: data.confirmPassword,
+        userId: user?.id ?? "",
+        token: token,
       }),
     onSuccess: async () => {
       logout();
       navigate("/signin");
     },
   });
-  const onSubmit: SubmitHandler<UpdatePasswordDataType> = (data) => {
+  const onSubmit: SubmitHandler<ApiDataType> = (data) => {
     console.log("ONSUBMIT", data);
     updataMutate(data);
   };
@@ -88,7 +89,7 @@ const UpdatePassword: React.FC<UpdatePasswordDataType> = () => {
               label="Confirm Password"
               register={register}
             />
-            <p className="text-red-500">{errors.confirm_password?.message}</p>
+            <p className="text-red-500">{errors.confirmPassword?.message}</p>
           </div>
 
           <Button type="submit">{"Update"}</Button>

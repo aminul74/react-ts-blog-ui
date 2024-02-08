@@ -64,19 +64,28 @@ const BlogCard: React.FC<FetchBlogsResponse> = ({
                   </div>
                 </div>
                 <div className="flex items-center justify-between w-full">
-                  <div className="text-xs leading-4">
-                    <div className="font-semibold text-gray-900 underline">
+                  <div className="flex items-center">
+                    <div className="relative w-6 h-6 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600 mr-2 mt-2">
+                      <svg
+                        className="absolute w-6 h-8 text-gray-400"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                        ></path>
+                      </svg>
+                    </div>
+                    <div className="font-semibold text-gray-900 text-xs leading-4 underline">
                       <div>
-                        <img
-                          src={"src/assets/user.png"}
-                          alt=""
-                          className="h-6 w-6 rounded-full bg-gray-50"
-                        />
                         {blog.User.username}
+                        <p className="text-gray-600">{"blogger"}</p>
                       </div>
                     </div>
-                    <p className="text-gray-600">{"bloger"}</p>
                   </div>
+
                   <Button
                     className="inline-flex px-4 py-2 text-md font-medium text-black hover:bg-gray-300"
                     type={"button"}

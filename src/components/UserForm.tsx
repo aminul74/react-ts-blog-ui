@@ -1,7 +1,7 @@
 import React from "react";
 import InputField from "./InputField";
 import Button from "./Button";
-import api from "../utility/userApis";
+import api,{ApiDataType} from "../utility/userApis";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -10,12 +10,12 @@ import { signInSchema } from "../utility/userFormValidation";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contextApi/UseAuthContext";
 
-interface FormData {
-  username: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-}
+// interface FormData {
+//   username: string;
+//   email: string;
+//   password: string;
+//   confirmPassword: string;
+// }
 type UserFormProps = {
   isSignIn: boolean;
   isSignUp: boolean;
@@ -29,13 +29,13 @@ const UserForm: React.FC<UserFormProps> = ({ isSignIn, isSignUp }) => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormData>({
+  } = useForm<ApiDataType>({
     resolver: yupResolver(schema) as never,
   });
 
   const { mutate: signInMutate } = useMutation({
     mutationKey: ["signIn"],
-    mutationFn: async (data: FormData) => api.signInFetch(data),
+    mutationFn: async (data: ApiDataType) => api.signInFetch(data),
     onError: (error: Error) => {
       console.error("Error during signInMutate:", error);
     },
@@ -50,7 +50,7 @@ const UserForm: React.FC<UserFormProps> = ({ isSignIn, isSignUp }) => {
 
   const { mutate: signUpMutate } = useMutation({
     mutationKey: ["signUp"],
-    mutationFn: async (data: FormData) => api.signUpFetch(data),
+    mutationFn: async (data: ApiDataType) => api.signUpFetch(data),
     onError: (error: Error) => {
       console.error("Error during signInMutate:", error);
     },
@@ -64,7 +64,7 @@ const UserForm: React.FC<UserFormProps> = ({ isSignIn, isSignUp }) => {
     },
   });
 
-  const onSubmit: SubmitHandler<FormData> = (data) => {
+  const onSubmit: SubmitHandler<ApiDataType> = (data) => {
     if (isSignUp) {
       if (data.password !== data.confirmPassword) {
         return;

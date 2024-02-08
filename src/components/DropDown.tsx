@@ -40,7 +40,7 @@ const UserProfileDropdown: React.FC<DropDownProps> = () => {
       <Button
         id="dropdownAvatarNameButton"
         data-dropdown-toggle="dropdownAvatarName"
-        className="flex items-center text-xl pe-1 font-medium text-white rounded-full hover:text-slate-300 md:me-0 transition transform hover:-translate-y-0.5 border border-white hover:bg-indigo-900"
+        className="flex items-center text-xl pe-5 ps-2 p-1 mt-2 rounded-md font-medium text-white hover:text-slate-300 md:me-0 transition-transform border border-gray-600 hover:bg-indigo-800 transform hover:scale-105 duration-300 ease-in-out"
         type="button"
         onClick={toggleDropdown}
       >

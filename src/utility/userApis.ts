@@ -2,108 +2,95 @@ import axios from "axios";
 
 const BASE_URL_SIGNIN = "http://localhost:4001/api/v1/auth/login";
 const BASE_URL_SIGNUP = "http://localhost:4001/api/v1/auth/register";
-// const BASE_URL_UPDATE = "http://localhost:4001/api/v1/users/:uuId";
+const BASE_URL_COMMON = "http://localhost:4001/api/v1/users/";
 
- export type SignInSignUpResponse = {
-  token: string;
-};
-type SignInSignUpRequest = {
-  username: string;
-  email: string;
-  password: string;
-};
-
-export type updateApiType = {
-  old_password: string;
-  new_password: string;
-  confirm_password: string;
+export interface ApiDataType {
+  username?: string;
+  email?: string;
+  password?: string;
+  old_password?: string;
+  new_password?: string;
+  confirmPassword?: string;
   token?: string | null;
-  userId:string
-};
+  userId?: string | null;
+}
 
 const signInFetch = async ({
   username,
   password,
-}: SignInSignUpRequest): Promise<SignInSignUpResponse> => {
-  // console.log("1")
-  try {
-    const response = await axios.post(
-      BASE_URL_SIGNIN,
-      {
-        username,
-        password,
+}: ApiDataType): Promise<ApiDataType> => {
+  const response = await axios.post(
+    BASE_URL_SIGNIN,
+    {
+      username,
+      password,
+    },
+    {
+      headers: {
+        Accept: "application/json",
       },
-      {
-        headers: {
-          Accept: "application/json",
-        },
-      }
-    );
-    console.log("SignIn", response.data);
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching", error);
-    throw error;
-  }
+    }
+  );
+  return response.data;
 };
 
 const signUpFetch = async ({
   username,
   email,
   password,
-}: SignInSignUpRequest): Promise<SignInSignUpResponse> => {
-  // console.log("CALLED")
-  try {
-    const response = await axios.post(
-      BASE_URL_SIGNUP,
-      {
-        username,
-        email,
-        password,
+}: ApiDataType): Promise<ApiDataType> => {
+  const response = await axios.post(
+    BASE_URL_SIGNUP,
+    {
+      username,
+      email,
+      password,
+    },
+    {
+      headers: {
+        Accept: "application/json",
       },
-      {
-        headers: {
-          Accept: "application/json",
-        },
-      }
-    );
-    console.log("SignUP", response.data);
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching", error);
-    throw error;
-  }
+    }
+  );
+  return response.data;
 };
 
 const updatePasswordFetch = async ({
   old_password,
   new_password,
   token,
-  userId
-}: updateApiType): Promise<boolean> => {
-  console.log("DDDDDDDDD", userId);
-const BASE_URL_UPDATE = `http://localhost:4001/api/v1/users/${userId}`;
+  userId,
+}: ApiDataType): Promise<void> => {
 
-  try {
-    const response = await axios.put(
-      BASE_URL_UPDATE,
-      {
-        old_password,
-        new_password,
+  const response = await axios.put(
+    `${BASE_URL_COMMON}${userId}`,
+    {
+      old_password,
+      new_password,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
       },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
-      }
-    );
-    console.log("RES", response.data);
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching", error);
-    throw error;
-  }
+    }
+  );
+  return response.data;
 };
 
-export default { signUpFetch, signInFetch, updatePasswordFetch };
+const deleteUser = async ({ userId, token }: ApiDataType): Promise<void> => {
+  const response = await axios.delete(
+    `${BASE_URL_COMMON}${userId}`,
+
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    }
+  );
+  console.log("INSIDE",response.data)
+  return response.data;
+};
+
+export default { signUpFetch, signInFetch, updatePasswordFetch, deleteUser };

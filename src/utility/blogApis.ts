@@ -4,19 +4,19 @@ export interface BlogProps {
   page?: number;
   pageSize?: number;
   blog?: unknown;
-  token?: string |null;
+  token?: string | null;
   uuId?: string;
   updatedBlog?: unknown;
 }
 
-export const fetchBlogs = async ({ page, pageSize }: BlogProps) => {
+const fetchBlogs = async ({ page, pageSize }: BlogProps) => {
   const response = await axios.get(
     `http://localhost:4001/api/v1/blogs?page=${page}&size=${pageSize}`
   );
   return response.data;
 };
 
-export const createBlog = async ({ blog, token }: BlogProps) => {
+const createBlog = async ({ blog, token }: BlogProps) => {
   const response = await axios.post(
     "http://localhost:4001/api/v1/blogs/create",
     blog,
@@ -31,7 +31,7 @@ export const createBlog = async ({ blog, token }: BlogProps) => {
   return response.data;
 };
 
-export const fetchSingleBlog = async ({ uuId, token }: BlogProps) => {
+const fetchSingleBlog = async ({ uuId, token }: BlogProps) => {
   const response = await axios.get(
     `http://localhost:4001/api/v1/blogs/${uuId}`,
     {
@@ -45,7 +45,7 @@ export const fetchSingleBlog = async ({ uuId, token }: BlogProps) => {
   return response.data ? response.data[0] : [];
 };
 
-export const updateBlog = async ({ uuId, updatedBlog, token }: BlogProps) => {
+const updateBlog = async ({ uuId, updatedBlog, token }: BlogProps) => {
   await axios.put(`http://localhost:4001/api/v1/blogs/${uuId}`, updatedBlog, {
     headers: {
       "Content-Type": "application/json",
@@ -54,11 +54,19 @@ export const updateBlog = async ({ uuId, updatedBlog, token }: BlogProps) => {
   });
 };
 
-export const deleteBlog = async ({ uuId, token }: BlogProps) => {
+const deleteBlog = async ({ uuId, token }: BlogProps) => {
   await axios.delete(`http://localhost:4001/api/v1/blogs/${uuId}`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
   });
+};
+
+export default {
+  createBlog,
+  fetchBlogs,
+  fetchSingleBlog,
+  updateBlog,
+  deleteBlog,
 };

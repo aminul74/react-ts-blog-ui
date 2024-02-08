@@ -9,7 +9,7 @@ import {
   UseMutationResult,
   MutationKey,
 } from "@tanstack/react-query";
-import { fetchBlogs, createBlog } from "../utility/blogApis";
+import api from "../utility/blogApis";
 import { useBlogContext } from "../contextApi/UseBlogContext";
 import { useNavigate } from "react-router-dom";
 import Modal from "../components/Modal";
@@ -48,7 +48,7 @@ const BlogPage: React.FC = () => {
   const { data, isLoading }: UseQueryResult<FetchBlogsResponse> = useQuery({
     queryKey,
     queryFn: async () =>
-      await fetchBlogs({ page: nextPage, pageSize: blogPerPage }),
+      await api.fetchBlogs({ page: nextPage, pageSize: blogPerPage }),
     staleTime: 16000,
   });
 
@@ -59,7 +59,7 @@ const BlogPage: React.FC = () => {
     useMutation({
       mutationKey,
       mutationFn: async (data: Blog) => {
-        await createBlog({ blog: data, token: token });
+        await api.createBlog({ blog: data, token: token });
       },
       onSuccess: () => {
         setOpenModal(false);
@@ -85,7 +85,7 @@ const BlogPage: React.FC = () => {
         isOpen={openModal}
         title="Create Your Blog"
       >
-        <BlogForm onSubmit={handleCreateBlog}/>
+        <BlogForm onSubmit={handleCreateBlog} />
       </Modal>
     </div>
   );
