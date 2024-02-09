@@ -78,16 +78,14 @@ const BlogCard: React.FC<FetchBlogsResponse> = ({
                         ></path>
                       </svg>
                     </div>
-                    <div className="font-semibold text-gray-900 text-xs leading-4 underline">
-                      <div>
-                        {blog.User.username}
-                        <p className="text-gray-600">{"blogger"}</p>
-                      </div>
+                    <div className="font-semibold text-gray-900 text-xs leading-4">
+                      <div className="underline">{blog.User.username}</div>
+                      <p className="text-gray-600">{"blogger"}</p>
                     </div>
                   </div>
 
                   <Button
-                    className="inline-flex px-4 py-2 text-md font-medium text-black hover:bg-gray-300"
+                    className="inline-flex px-4 py-2 text-md font-medium text-black hover:bg-gray-300 rounded-md"
                     type={"button"}
                     onClick={() => navigate(`/blog/${blog.id}`)}
                   >

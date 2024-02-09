@@ -15,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 import Modal from "../components/Modal";
 import BlogForm from "../components/BlogForm";
 import { useAuth } from "../contextApi/UseAuthContext";
+import { toast } from "react-toastify";
 
 interface User {
   username: string;
@@ -62,6 +63,7 @@ const BlogPage: React.FC = () => {
         await api.createBlog({ blog: data, token: token });
       },
       onSuccess: () => {
+        toast.success("Blog Create Successfully !", { autoClose: 1000 });
         setOpenModal(false);
         navigate("/blogs");
       },

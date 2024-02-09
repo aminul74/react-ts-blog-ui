@@ -1,4 +1,5 @@
 import React from "react";
+import { toast } from "react-toastify";
 import Button from "./Button";
 import InputField from "./InputField";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -9,11 +10,6 @@ import { useAuth } from "../contextApi/UseAuthContext";
 import { useNavigate } from "react-router-dom";
 import { schema } from "../utility/userUpdateFormValidation";
 
-// interface UpdatePasswordDataType {
-//   old_password: string;
-//   new_password: string;
-//   confirmPassword: string;
-// }
 const UpdatePassword: React.FC<ApiDataType> = () => {
   const { user, token, logout } = useAuth();
   const navigate = useNavigate();
@@ -36,12 +32,14 @@ const UpdatePassword: React.FC<ApiDataType> = () => {
         token: token,
       }),
     onSuccess: async () => {
+      toast.success("Password Update Successfully !", {
+        autoClose: 1000,
+      });
       logout();
       navigate("/signin");
     },
   });
   const onSubmit: SubmitHandler<ApiDataType> = (data) => {
-    console.log("ONSUBMIT", data);
     updataMutate(data);
   };
   return (
@@ -92,7 +90,12 @@ const UpdatePassword: React.FC<ApiDataType> = () => {
             <p className="text-red-500">{errors.confirmPassword?.message}</p>
           </div>
 
-          <Button type="submit">{"Update"}</Button>
+          <Button
+            type="submit"
+            className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          >
+            {"Update"}
+          </Button>
         </form>
       </div>
     </div>

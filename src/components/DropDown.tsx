@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../contextApi/UseAuthContext";
 import Button from "./Button";
+import ConfirmAlert from "./ConfirmAlert";
 
 type DropDownProps = {
   userLabel?: string;
@@ -14,6 +15,7 @@ const UserProfileDropdown: React.FC<DropDownProps> = () => {
   const userLabel = user?.username || "";
   const [isDropdownOpen, setDropdownOpen] = useState<boolean>(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const [isAlert, setAlert] = useState<boolean>(false);
 
   const toggleDropdown = () => {
     setDropdownOpen(!isDropdownOpen);
@@ -33,7 +35,7 @@ const UserProfileDropdown: React.FC<DropDownProps> = () => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [dropdownRef]);
+  }, []);
 
   return (
     <div className="relative mb-5" ref={dropdownRef}>
@@ -111,12 +113,24 @@ const UserProfileDropdown: React.FC<DropDownProps> = () => {
         <div className="py-2">
           <Button
             type="submit"
-            onClick={handleLogout}
+            onClick={() => setAlert(true)}
             className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white w-full text-start"
           >
             Sign out
           </Button>
         </div>
+        {isAlert && (
+          <ConfirmAlert
+            isOpen={isAlert}
+            onClose={() => {
+              setAlert(false);
+              setDropdownOpen(false);
+            }}
+            onConfirm={handleLogout}
+            title="Logout ?"
+            message="Are you sure you would like to Logout?"
+          />
+        )}
       </div>
     </div>
   );

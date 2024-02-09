@@ -10,12 +10,6 @@ import { signInSchema } from "../utility/userFormValidation";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contextApi/UseAuthContext";
 
-// interface FormData {
-//   username: string;
-//   email: string;
-//   password: string;
-//   confirmPassword: string;
-// }
 type UserFormProps = {
   isSignIn: boolean;
   isSignUp: boolean;
@@ -58,7 +52,6 @@ const UserForm: React.FC<UserFormProps> = ({ isSignIn, isSignUp }) => {
       const { token } = data[0];
       const userInfo = await getUser(token);
       const user = userInfo.data[0];
-      console.log("TTTTT", user, token);
       login(token, user);
       navigate("/");
     },

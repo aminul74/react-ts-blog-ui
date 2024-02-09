@@ -1,11 +1,14 @@
 import React from "react";
+import { toast } from "react-toastify";
 import UserUpdatePasswordForm from "../components/UserUpdateForm";
 import Button from "../components/Button";
-import api,{ApiDataType} from "../utility/userApis";
+import api, { ApiDataType } from "../utility/userApis";
 import { MutationKey, useMutation } from "@tanstack/react-query";
 import { useAuth } from "../contextApi/UseAuthContext";
+import { useNavigate } from "react-router-dom";
 
 const UserProfile: React.FC<ApiDataType> = () => {
+  const navigate = useNavigate();
   const { token, user } = useAuth();
   const deleteUserKey: MutationKey = ["deleteUser", token, user?.id];
 
@@ -14,9 +17,13 @@ const UserProfile: React.FC<ApiDataType> = () => {
     mutationFn: async () => {
       api.deleteUser({ token: token, userId: user?.id } as ApiDataType);
     },
-    onSuccess:()=>{
-      console.log("SUCCESS")
-    }
+    onSuccess: () => {
+      toast.error("Your Account Removed", {
+        autoClose: 1000,
+      });
+      navigate("/signup");
+      console.log("SUCCESS");
+    },
   });
   return (
     <div className="bg-gray-900 h-screen p-2">
@@ -24,7 +31,6 @@ const UserProfile: React.FC<ApiDataType> = () => {
         <div className="grid grid-cols-1 md:grid-cols-3">
           <div className="grid grid-cols-3 text-center order-last md:order-first md:mt-0">
             <div>
-              {/* <p className="text-gray-400">Status:</p> */}
               <p className="text-green-500">Active</p>
             </div>
           </div>

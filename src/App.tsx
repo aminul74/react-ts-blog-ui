@@ -9,7 +9,7 @@ import SignupPage from "./pages/SignupPage";
 import BlogPage from "./pages/BlogPage";
 import BlogDetails from "./pages/BlogDetails";
 import ProfilePage from "./pages/ProfilePage";
-// import BlogForm from "./components/BlogForm";
+import ConfirmationAlert from "./components/ConfirmAlert";
 
 function App() {
   return (
@@ -17,7 +17,7 @@ function App() {
       <Header />
       <Routes>
         <Route path="/" element={<HeroSection />} />
-        {/* <Route path="/check" element={<BlogForm />} /> */}
+        <Route path="/check" element={<ConfirmationAlert />} />
         <Route path="/signin" element={<SignInPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/profile" element={<ProfilePage />} />

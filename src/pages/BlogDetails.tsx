@@ -7,6 +7,7 @@ import {
   MutationKey,
   UseMutationResult,
 } from "@tanstack/react-query";
+import { toast } from "react-toastify";
 import { useAuth } from "../contextApi/UseAuthContext";
 import api from "../utility/blogApis";
 import { useParams, useNavigate } from "react-router-dom";
@@ -17,9 +18,11 @@ import Button from "../components/Button";
 import ActionButton from "../components/ActionButton";
 import Modal from "../components/Modal";
 import BlogForm from "../components/BlogForm";
+import ConfirmAlert from "../components/ConfirmAlert";
 
 const BlogDetails: React.FC = () => {
-  const [openModal, setOpenModal] = useState<boolean>(false);
+  const [isModal, setModal] = useState<boolean>(false);
+  const [isAlert, setAlert] = useState<boolean>(false);
   const { token, user } = useAuth();
   const { uuid } = useParams<{ uuid: string }>();
   const navigate = useNavigate();
@@ -39,7 +42,10 @@ const BlogDetails: React.FC = () => {
       mutationFn: async (blog: Blog) =>
         await api.updateBlog({ uuId: uuid, updatedBlog: blog, token: token }),
       onSuccess: () => {
-        setOpenModal(false);
+        toast.success("Your Blog Update Successfully !", {
+          autoClose: 1000,
+        });
+        setModal(false);
       },
     });
 
@@ -49,6 +55,9 @@ const BlogDetails: React.FC = () => {
       mutationFn: async () =>
         await api.deleteBlog({ uuId: uuid, token: token }),
       onSuccess: () => {
+        toast.success("Your Blog Delete Successfully !", {
+          autoClose: 1000,
+        });
         navigate("/blogs");
       },
     });
@@ -83,20 +92,30 @@ const BlogDetails: React.FC = () => {
 
         {user?.id == blog.authorId ? (
           <div className="inline-flex items-center shadow-sm">
-            <ActionButton type="edit" onClick={() => setOpenModal(true)}>
+            <ActionButton type="edit" onClick={() => setModal(true)}>
               Edit
             </ActionButton>
 
-            <ActionButton type="delete" onClick={() => handleDeleteClick(blog)}>
+            <ActionButton type="delete" onClick={() => setAlert(true)}>
               Delete
             </ActionButton>
           </div>
         ) : null}
       </div>
-
-      {openModal && (
+      {isAlert && (
         <div>
-          <Modal isOpen={openModal} onClose={() => setOpenModal(false)}>
+          <ConfirmAlert
+            isOpen={isAlert}
+            onClose={() => setAlert(false)}
+            onConfirm={() => handleDeleteClick(blog)}
+            title="Attention !"
+            message="Are you sure you would like to Delete?"
+          />
+        </div>
+      )}
+      {isModal && (
+        <div>
+          <Modal isOpen={isModal} onClose={() => setModal(false)}>
             <BlogForm onSubmit={handleEditClick} blog={blog} />
           </Modal>
         </div>

@@ -18,9 +18,9 @@ const Modal: React.FC<ModalProps> = ({
     <div
       className={`fixed left-0 top-0 z-50 ${
         isOpen ? "" : "hidden"
-      } h-full w-full overflow-y-auto overflow-x-hidden backdrop-blur-sm backdrop-filter backdrop-contrast-120 outline-none`}
+      } h-full w-full overflow-y-auto overflow-x-hidden backdrop-blur-md backdrop-filter backdrop-contrast-120 outline-none`}
     >
-      <div className="relative w-auto mx-auto mt-20 max-w-[500px]">
+      <div className="relative w-auto mx-auto mt-36 max-w-[500px]">
         <div className="shadow-[0_0.5rem_1rem_rgba(#000, 0.15)] relative flex flex-col rounded-md bg-gray-800">
           <div className="flex-shrink-0 items-center justify-between rounded-t-md p-4 dark:border-opacity-50">
             <h5 className="text-xl font-medium leading-normal text-neutral-80">
