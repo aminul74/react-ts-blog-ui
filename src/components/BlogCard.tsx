@@ -5,13 +5,22 @@ import { useBlogContext } from "../contextApi/UseBlogContext";
 import { dateFormatter } from "../utility/tools";
 import Button from "./Button";
 import Paginate from "./Paginate";
-import { Blog, FetchBlogsResponse } from "../pages/BlogPage";
+import { Blog } from "../utility/blogApis";
 
-const BlogCard: React.FC<FetchBlogsResponse> = ({
+interface BlogCardProps {
+  blogs: Blog[];
+  totalCount: number;
+  isLoading: boolean;
+  message?: string |null;
+}
+
+const BlogCard: React.FC<BlogCardProps> = ({
   blogs,
   totalCount,
   isLoading,
+  message,
 }) => {
+  console.log("Message prop:", message);
   const navigate = useNavigate();
   const { pageNumber, setPageNumber } = useBlogContext();
 
@@ -34,12 +43,13 @@ const BlogCard: React.FC<FetchBlogsResponse> = ({
           <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
             Publish your passions, your way
           </h2>
+
           <p className="mt-2 text-lg leading-8 text-gray-600">
             Create a unique and beautiful blog easily.
           </p>
         </div>
         <div className="mx-auto mt-10 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 border-t border-gray-200 pt-10 sm:mt-16 sm:pt-16 lg:mx-0 lg:max-w-none lg:grid-cols-3">
-          {blogs.map((blog: Blog) => (
+          {blogs.map((blog) => (
             <article
               key={blog.id}
               className="flex max-w-xl flex-col items-start justify-between bg-slate-100 p-10 rounded hover:bg-indigo-100 transition transform hover:-translate-y-0.5"
@@ -79,7 +89,7 @@ const BlogCard: React.FC<FetchBlogsResponse> = ({
                       </svg>
                     </div>
                     <div className="font-semibold text-gray-900 text-xs leading-4">
-                      <div className="underline">{blog.User.username}</div>
+                      <div className="underline">{blog.User?.username}</div>
                       <p className="text-gray-600">{"blogger"}</p>
                     </div>
                   </div>

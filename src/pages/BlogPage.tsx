@@ -9,31 +9,13 @@ import {
   UseMutationResult,
   MutationKey,
 } from "@tanstack/react-query";
-import api from "../utility/blogApis";
+import api, { CreateBlogProps, Blog } from "../utility/blogApis";
 import { useBlogContext } from "../contextApi/UseBlogContext";
 import { useNavigate } from "react-router-dom";
 import Modal from "../components/Modal";
 import BlogForm from "../components/BlogForm";
 import { useAuth } from "../contextApi/UseAuthContext";
 import { toast } from "react-toastify";
-
-interface User {
-  username: string;
-  token: string | null;
-}
-export interface Blog {
-  authorId: string | undefined;
-  id: number;
-  title?: string;
-  content?: string;
-  User: User;
-  createdAt: string;
-}
-export interface FetchBlogsResponse {
-  blogs: Blog[];
-  isLoading: boolean;
-  totalCount: number;
-}
 
 const BlogPage: React.FC = () => {
   const [openModal, setOpenModal] = useState<boolean>(false);
@@ -46,7 +28,7 @@ const BlogPage: React.FC = () => {
   const queryKey: QueryKey = ["blogs", nextPage, blogPerPage];
   const mutationKey: MutationKey = ["createBlog", token];
 
-  const { data, isLoading }: UseQueryResult<FetchBlogsResponse> = useQuery({
+  const { data, isLoading }: UseQueryResult<CreateBlogProps> = useQuery({
     queryKey,
     queryFn: async () =>
       await api.fetchBlogs({ page: nextPage, pageSize: blogPerPage }),

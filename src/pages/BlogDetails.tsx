@@ -13,7 +13,7 @@ import api from "../utility/blogApis";
 import { useParams, useNavigate } from "react-router-dom";
 import { BeatLoader } from "react-spinners";
 import { dateFormatter } from "../utility/tools";
-import { Blog } from "../pages//BlogPage";
+import { Blog } from "../utility/blogApis";
 import Button from "../components/Button";
 import ActionButton from "../components/ActionButton";
 import Modal from "../components/Modal";

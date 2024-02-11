@@ -9,7 +9,7 @@ import SignupPage from "./pages/SignupPage";
 import BlogPage from "./pages/BlogPage";
 import BlogDetails from "./pages/BlogDetails";
 import ProfilePage from "./pages/ProfilePage";
-import ConfirmationAlert from "./components/ConfirmAlert";
+import MyBlogPage from "./pages/MyBlogPage";
 
 function App() {
   return (
@@ -17,13 +17,14 @@ function App() {
       <Header />
       <Routes>
         <Route path="/" element={<HeroSection />} />
-        <Route path="/check" element={<ConfirmationAlert />} />
+        <Route path="/check" element={<MyBlogPage />} />
         <Route path="/signin" element={<SignInPage />} />
         <Route path="/signup" element={<SignupPage />} />
-        <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/profile/:uuid" element={<ProfilePage />} />
         <Route path="/about" element={<AboutSection />} />
         <Route path="/blog/:uuid" element={<BlogDetails />} />
         <Route path="/blogs" element={<BlogPage />} />
+        <Route path="/user/:uuid" element={<MyBlogPage />} />
       </Routes>
       <Footer />
     </Router>

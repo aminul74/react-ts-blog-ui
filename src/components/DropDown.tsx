@@ -3,13 +3,14 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../contextApi/UseAuthContext";
 import Button from "./Button";
 import ConfirmAlert from "./ConfirmAlert";
+import { useNavigate } from "react-router-dom";
 
 type DropDownProps = {
   userLabel?: string;
   userEmail?: string;
 };
-
 const UserProfileDropdown: React.FC<DropDownProps> = () => {
+  const navigate = useNavigate();
   const { user, logout } = useAuth();
   const userEmail = user?.email || "";
   const userLabel = user?.username || "";
@@ -94,7 +95,8 @@ const UserProfileDropdown: React.FC<DropDownProps> = () => {
         >
           <li>
             <Link
-              to="#"
+              to={`/user/${user?.id}`}
+              onClick={() => setDropdownOpen(false)}
               className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
             >
               MyBlogs
@@ -102,7 +104,7 @@ const UserProfileDropdown: React.FC<DropDownProps> = () => {
           </li>
           <li>
             <Link
-              to={"/profile"}
+              to={`/profile/${user?.id}`}
               onClick={() => setDropdownOpen(false)}
               className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
             >
@@ -113,7 +115,9 @@ const UserProfileDropdown: React.FC<DropDownProps> = () => {
         <div className="py-2">
           <Button
             type="submit"
-            onClick={() => setAlert(true)}
+            onClick={() => {
+              setAlert(true), navigate("/signin");
+            }}
             className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white w-full text-start"
           >
             Sign out
