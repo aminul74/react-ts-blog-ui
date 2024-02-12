@@ -3,15 +3,13 @@ import {
   QueryKey,
   useQuery,
   useMutation,
-  UseQueryResult,
   MutationKey,
-  UseMutationResult,
+  useQueryClient,
 } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { useAuth } from "../contextApi/UseAuthContext";
 import api from "../utility/blogApis";
 import { useParams, useNavigate } from "react-router-dom";
-import { BeatLoader } from "react-spinners";
 import { dateFormatter } from "../utility/tools";
 import { Blog } from "../utility/blogApis";
 import Button from "../components/Button";
@@ -19,11 +17,15 @@ import ActionButton from "../components/ActionButton";
 import Modal from "../components/Modal";
 import BlogForm from "../components/BlogForm";
 import ConfirmAlert from "../components/ConfirmAlert";
+import LoadingSpinner from "../components/LoadSpinner";
+import { useBlogContext } from "../contextApi/UseBlogContext";
 
 const BlogDetails: React.FC = () => {
   const [isModal, setModal] = useState<boolean>(false);
   const [isAlert, setAlert] = useState<boolean>(false);
   const { token, user } = useAuth();
+  const { myBlogPageNumber } = useBlogContext();
+  const queryClient = useQueryClient();
   const { uuid } = useParams<{ uuid: string }>();
   const navigate = useNavigate();
 
@@ -31,66 +33,62 @@ const BlogDetails: React.FC = () => {
   const blogUpdateKey: MutationKey = ["updateBlog", uuid, token];
   const blogDeleteKey: MutationKey = ["deleteBlog", uuid];
 
-  const { data: blog, isLoading }: UseQueryResult<Blog> = useQuery({
+  const { data: blog, isLoading } = useQuery({
     queryKey: blogQueryKey,
     queryFn: async () => api.fetchSingleBlog({ uuId: uuid, token: token }),
+    staleTime: 16000,
   });
 
-  const { mutate: updateBlogMutate }: UseMutationResult<void, Error, Blog> =
-    useMutation({
-      mutationKey: blogUpdateKey,
-      mutationFn: async (blog: Blog) =>
-        await api.updateBlog({ uuId: uuid, updatedBlog: blog, token: token }),
-      onSuccess: () => {
-        toast.success("Your Blog Update Successfully !", {
-          autoClose: 1000,
-        });
-        setModal(false);
-      },
-    });
+  const { mutate: updateBlogMutate } = useMutation({
+    mutationKey: blogUpdateKey,
+    mutationFn: async (blog: Blog) =>
+      await api.updateBlog({ uuId: uuid, updatedBlog: blog, token: token }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["blog"] });
+      toast.success("Your Blog Update Successfully !", {
+        autoClose: 1000,
+      });
+      setModal(false);
+    },
+  });
 
-  const { mutate: deleteBlogMutate }: UseMutationResult<void, Error, Blog> =
-    useMutation({
-      mutationKey: blogDeleteKey,
-      mutationFn: async () =>
-        await api.deleteBlog({ uuId: uuid, token: token }),
-      onSuccess: () => {
-        toast.success("Your Blog Delete Successfully !", {
-          autoClose: 1000,
-        });
-        navigate("/blogs");
-      },
-    });
+  const { mutate: deleteBlogMutate } = useMutation({
+    mutationKey: blogDeleteKey,
+    mutationFn: async () => await api.deleteBlog({ uuId: uuid, token: token }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["blogs"] });
+      toast.success("Your Blog Delete Successfully !", {
+        autoClose: 1000,
+      });
+      navigate("/blogs");
+    },
+  });
 
   const handleEditClick = (blog: Blog) => {
     updateBlogMutate(blog);
   };
 
-  const handleDeleteClick = (blog: Blog) => {
-    deleteBlogMutate(blog);
+  const handleDeleteClick = () => {
+    deleteBlogMutate();
   };
 
-  if (isLoading || !blog) {
-    return (
-      <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-gray-800 bg-opacity-75 z-50">
-        <BeatLoader color="#312E81" loading={isLoading} />
-      </div>
-    );
-  }
   return (
     <div className="bg-white min-h-screen py-16 p-5 sm:py-20">
+      <LoadingSpinner isLoading={isLoading} hasData={Boolean(blog)} />
       <div className="flex justify-between items-center mb-4 mt-2">
         <div>
           <Button
             type="button"
             className="text-sm text-black hover:text-green-600 bg-white hover:bg-slate-100 border border-slate-200 font-medium px-4 py-2 inline-flex space-x-1 items-center"
-            onClick={() => navigate("/blogs")}
+            onClick={() =>
+              myBlogPageNumber ? navigate(`/user/${user?.id}`) : navigate("/blogs")
+            }
           >
             <span>&#8592; Go back</span>
           </Button>
         </div>
 
-        {user?.id == blog.authorId ? (
+        {user && blog && user.id === blog.authorId ? (
           <div className="inline-flex items-center shadow-sm">
             <ActionButton type="edit" onClick={() => setModal(true)}>
               Edit
@@ -102,12 +100,12 @@ const BlogDetails: React.FC = () => {
           </div>
         ) : null}
       </div>
-      {isAlert && (
+      {isAlert && blog && (
         <div>
           <ConfirmAlert
             isOpen={isAlert}
             onClose={() => setAlert(false)}
-            onConfirm={() => handleDeleteClick(blog)}
+            onConfirm={() => handleDeleteClick()}
             title="Attention !"
             message="Are you sure you would like to Delete?"
           />
@@ -123,20 +121,20 @@ const BlogDetails: React.FC = () => {
 
       <div className="mx-auto max-w-2xl px-6 lg:px-8">
         <div className="text-xl font-bold tracking-tight text-gray-900 sm:text-xl">
-          {blog.title}
+          {blog && blog.title}
         </div>
         <div className="mt-2">
           <div className="text-sm leading-6 mt-2">
             <p className="font-semibold text-gray-900 underline">
-              {blog.User.username}
+              {blog?.User.username}
             </p>
             <time className="text-gray-500">
-              {dateFormatter(blog.createdAt)}
+              {blog && dateFormatter(blog.createdAt)}
             </time>
           </div>
         </div>
         <p className="mt-8 text-lg leading-8 text-gray-800 pb-10">
-          {blog.content}
+          {blog && blog.content}
         </p>
       </div>
     </div>

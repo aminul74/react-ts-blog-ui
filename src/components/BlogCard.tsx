@@ -1,51 +1,50 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { BeatLoader } from "react-spinners";
 import { useBlogContext } from "../contextApi/UseBlogContext";
 import { dateFormatter } from "../utility/tools";
 import Button from "./Button";
 import Paginate from "./Paginate";
 import { Blog } from "../utility/blogApis";
+import LoadingSpinner from "./LoadSpinner";
 
 interface BlogCardProps {
   blogs: Blog[];
   totalCount: number;
   isLoading: boolean;
-  message?: string |null;
+  isMyBlog?: boolean;
 }
 
 const BlogCard: React.FC<BlogCardProps> = ({
   blogs,
   totalCount,
   isLoading,
-  message,
+  isMyBlog,
 }) => {
-  console.log("Message prop:", message);
+  // console.log("TOTALCOUNT", blogs);
   const navigate = useNavigate();
-  const { pageNumber, setPageNumber } = useBlogContext();
-
+  const { pageNumber, setPageNumber, myBlogPageNumber, setMyBlogPageNumber } =
+    useBlogContext();
   const changePage = (data: { selected: number }) => {
-    setPageNumber(data.selected);
+    if (isMyBlog) {
+      setMyBlogPageNumber(data.selected);
+    } else {
+      setPageNumber(data.selected);
+    }
   };
-
-  if (isLoading) {
-    return (
-      <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-gray-800 bg-opacity-75 z-50">
-        <BeatLoader color="#312E81" loading={isLoading} />
-      </div>
-    );
-  }
 
   return (
     <div className="bg-white py-24 sm:py-32 min-h-screen">
+      <LoadingSpinner isLoading={isLoading} hasData={true} />
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-2xl lg:mx-0">
           <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-            Publish your passions, your way
+            {isMyBlog ? "My Blogs" : "Publish your passions, your way"}
           </h2>
 
           <p className="mt-2 text-lg leading-8 text-gray-600">
-            Create a unique and beautiful blog easily.
+            {isMyBlog
+              ? `Total blogs: ${totalCount}`
+              : "Create a unique and beautiful blog easily."}
           </p>
         </div>
         <div className="mx-auto mt-10 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 border-t border-gray-200 pt-10 sm:mt-16 sm:pt-16 lg:mx-0 lg:max-w-none lg:grid-cols-3">
@@ -109,7 +108,7 @@ const BlogCard: React.FC<BlogCardProps> = ({
       </div>
       <div>
         <Paginate
-          pageNumber={pageNumber}
+          pageNumber={isMyBlog ? myBlogPageNumber : pageNumber}
           totalCount={totalCount}
           changePage={changePage}
         />

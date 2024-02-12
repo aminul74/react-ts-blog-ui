@@ -1,23 +1,27 @@
-import React from "react";
+import React, { useEffect } from "react";
 import InputField from "./InputField";
 import Button from "./Button";
-import api,{ApiDataType} from "../utility/userApis";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { useMutation } from "@tanstack/react-query";
+import { ApiDataType } from "../utility/userApis";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { signUpSchema } from "../utility/userFormValidation";
 import { signInSchema } from "../utility/userFormValidation";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../contextApi/UseAuthContext";
 
 type UserFormProps = {
   isSignIn: boolean;
   isSignUp: boolean;
+  errorMessage: string | null;
+  onSubmit: SubmitHandler<ApiDataType>;
+  setErrorMessage: (erorMessage: string | null) => void;
 };
 
-const UserForm: React.FC<UserFormProps> = ({ isSignIn, isSignUp }) => {
-  const navigate = useNavigate();
-  const { login, getUser } = useAuth();
+const UserForm: React.FC<UserFormProps> = ({
+  isSignIn,
+  isSignUp,
+  onSubmit,
+  errorMessage,
+  setErrorMessage,
+}) => {
   const schema = isSignIn ? signInSchema : signUpSchema;
   const {
     register,
@@ -27,46 +31,14 @@ const UserForm: React.FC<UserFormProps> = ({ isSignIn, isSignUp }) => {
     resolver: yupResolver(schema) as never,
   });
 
-  const { mutate: signInMutate } = useMutation({
-    mutationKey: ["signIn"],
-    mutationFn: async (data: ApiDataType) => api.signInFetch(data),
-    onError: (error: Error) => {
-      console.error("Error during signInMutate:", error);
-    },
-    onSuccess: async (data) => {
-      const { token } = data[0];
-      const userInfo = await getUser(token);
-      const user = userInfo.data[0];
-      login(token, user);
-      navigate("/");
-    },
-  });
-
-  const { mutate: signUpMutate } = useMutation({
-    mutationKey: ["signUp"],
-    mutationFn: async (data: ApiDataType) => api.signUpFetch(data),
-    onError: (error: Error) => {
-      console.error("Error during signInMutate:", error);
-    },
-    onSuccess: async (data) => {
-      const { token } = data[0];
-      const userInfo = await getUser(token);
-      const user = userInfo.data[0];
-      login(token, user);
-      navigate("/");
-    },
-  });
-
-  const onSubmit: SubmitHandler<ApiDataType> = (data) => {
-    if (isSignUp) {
-      if (data.password !== data.confirmPassword) {
-        return;
-      }
-      signUpMutate(data);
-    } else {
-      signInMutate(data);
-    }
-  };
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      setErrorMessage(null);
+    }, 3000);
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [errorMessage, setErrorMessage]);
   return (
     <>
       <div className="flex items-center justify-center h-full min-w-screen">
@@ -77,6 +49,7 @@ const UserForm: React.FC<UserFormProps> = ({ isSignIn, isSignUp }) => {
                 ? "Sign in to your account"
                 : "Sign up in to your account"}
             </h2>
+            <p className="text-red-500">{errorMessage}</p>
             {(isSignIn || isSignUp) && (
               <div className="mt-2">
                 <InputField

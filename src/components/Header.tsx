@@ -1,15 +1,32 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import ListItem from "./NavListItem";
 import DropDown from "../components/DropDown";
 import { useAuth } from "../contextApi/UseAuthContext";
 import Button from "./Button";
 import { Link } from "react-router-dom";
+
 const Navbar: React.FC = () => {
-  const { token } = useAuth();
   const [open, setOpen] = useState<boolean>(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const { token } = useAuth();
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      dropdownRef.current
+        ? !dropdownRef.current.contains(event.target as Node) &&
+        setOpen(false)
+        : null;
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+  
   return (
     <header
       className={`flex items-center bg-indigo-900 dark:bg-dark fixed top-0 left-0 w-full z-50`}
+      ref={dropdownRef}
     >
       <div className="container mx-auto px-5">
         <div className="relative -mx-4 flex items-center justify-between">

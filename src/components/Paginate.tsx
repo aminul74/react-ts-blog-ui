@@ -12,10 +12,12 @@ const Paginate: React.FC<PaginateProps> = ({
   totalCount,
   changePage,
 }: PaginateProps) => {
+  const pageCount = Math.ceil(totalCount / 6);
+  // console.log("Paginate :", pageCount);
   return (
     <div className="flex items-center justify-center mt-16">
       <ReactPaginate
-        forcePage={pageNumber}
+        forcePage={Math.min(pageNumber, pageCount - 1)}
         pageCount={Math.ceil(totalCount / 6)}
         onPageChange={changePage}
         containerClassName="flex justify-center items-center text-black mt-8"

@@ -5,15 +5,15 @@ import Button from "./Button";
 import ConfirmAlert from "./ConfirmAlert";
 import { useNavigate } from "react-router-dom";
 
-type DropDownProps = {
+interface DropDownProps {
   userLabel?: string;
   userEmail?: string;
-};
+}
 const UserProfileDropdown: React.FC<DropDownProps> = () => {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
-  const userEmail = user?.email || "";
-  const userLabel = user?.username || "";
+  const userEmail = user?.email;
+  const userLabel = user?.username;
   const [isDropdownOpen, setDropdownOpen] = useState<boolean>(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [isAlert, setAlert] = useState<boolean>(false);

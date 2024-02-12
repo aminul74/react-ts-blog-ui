@@ -5,6 +5,7 @@ import {
   useQuery,
   useMutation,
   QueryKey,
+  useQueryClient,
   UseQueryResult,
   UseMutationResult,
   MutationKey,
@@ -20,6 +21,7 @@ import { toast } from "react-toastify";
 const BlogPage: React.FC = () => {
   const [openModal, setOpenModal] = useState<boolean>(false);
   const { token } = useAuth();
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
   const { pageNumber } = useBlogContext();
   const nextPage: number = pageNumber + 1;
@@ -45,6 +47,7 @@ const BlogPage: React.FC = () => {
         await api.createBlog({ blog: data, token: token });
       },
       onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ["blogs"] });
         toast.success("Blog Create Successfully !", { autoClose: 1000 });
         setOpenModal(false);
         navigate("/blogs");

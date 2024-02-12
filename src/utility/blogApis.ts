@@ -39,11 +39,14 @@ export interface DeleteBlogProps {
 
 export interface FetchUserBlogsProps {
   token: string | null;
+  page: number;
+  pageSize: number;
 }
 
-const USER_BLOG_URL = "http://localhost:4001/api/v1/blogs/my-blogs";
+// const USER_BLOG_URL = "http://localhost:4001/api/v1/blogs/my-blogs";
 
 const fetchBlogs = async ({ page, pageSize }: FetchBlogsProps) => {
+  // console.log("page :", page, "pageSize :", pageSize);
   const response = await axios.get(
     `http://localhost:4001/api/v1/blogs?page=${page}&size=${pageSize}`
   );
@@ -97,13 +100,21 @@ const deleteBlog = async ({ uuId, token }: DeleteBlogProps) => {
   });
 };
 
-const fetchUserBlogs = async ({ token }: FetchUserBlogsProps) => {
-  const response = await axios.get(USER_BLOG_URL, {
-    headers: {
-      Accept: "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-  });
+const fetchUserBlogs = async ({
+  token,
+  page,
+  pageSize,
+}: FetchUserBlogsProps) => {
+  // console.log("API :", token, "page :", page, "pageSize :", pageSize);
+  const response = await axios.get(
+    `http://localhost:4001/api/v1/blogs/my-blogs?page=${page}&size=${pageSize}`,
+    {
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
   return response.data;
 };
 

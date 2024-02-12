@@ -89,7 +89,6 @@ const deleteUser = async ({ userId, token }: ApiDataType): Promise<void> => {
       },
     }
   );
-  console.log("INSIDE",response.data)
   return response.data;
 };
 
