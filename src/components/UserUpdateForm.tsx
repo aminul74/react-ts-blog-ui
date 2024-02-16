@@ -3,27 +3,27 @@ import { toast } from "react-toastify";
 import Button from "./Button";
 import InputField from "./InputField";
 import { SubmitHandler, useForm } from "react-hook-form";
-import api, { ApiDataType } from "../utility/userApis";
+import api, { UpdatePasswordProps } from "../utility/userApis";
 import { useMutation } from "@tanstack/react-query";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useAuth } from "../contextApi/UseAuthContext";
 import { useNavigate } from "react-router-dom";
 import { schema } from "../utility/userUpdateFormValidation";
 
-const UpdatePassword: React.FC<ApiDataType> = () => {
+const UpdatePassword: React.FC<UpdatePasswordProps> = () => {
   const { user, token, logout } = useAuth();
   const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<ApiDataType>({
+  } = useForm<UpdatePasswordProps>({
     resolver: yupResolver(schema) as never,
   });
 
   const { mutate: updataMutate } = useMutation({
     mutationKey: ["updatePass", user?.id, token || ""],
-    mutationFn: async (data: ApiDataType) =>
+    mutationFn: async (data: UpdatePasswordProps) =>
       api.updatePasswordFetch({
         old_password: data.old_password,
         new_password: data.new_password,
@@ -39,7 +39,7 @@ const UpdatePassword: React.FC<ApiDataType> = () => {
       navigate("/signin");
     },
   });
-  const onSubmit: SubmitHandler<ApiDataType> = (data) => {
+  const onSubmit: SubmitHandler<UpdatePasswordProps> = (data) => {
     updataMutate(data);
   };
   return (

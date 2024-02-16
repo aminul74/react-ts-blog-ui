@@ -4,17 +4,18 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { schema } from "../utility/blogFormValidation";
 import InputField from "./InputField";
 import Button from "./Button";
-import { Blog } from "../pages//BlogPage";
+import { Blog } from "../utility/blogApis";
 
 interface BlogFormProps {
   onSubmit: SubmitHandler<Blog>;
-  blog?: Blog;
+  blog?: Blog | null | undefined;
 }
 const BlogForm: React.FC<BlogFormProps> = ({ blog, onSubmit }) => {
   const {
     handleSubmit,
     register,
     formState: { errors },
+    reset,
   } = useForm<Blog>({
     resolver: yupResolver(schema) as never,
   });
@@ -27,10 +28,9 @@ const BlogForm: React.FC<BlogFormProps> = ({ blog, onSubmit }) => {
     setLocalContent(blog?.content || "");
   }, [blog]);
 
-  // console.log("Title :", localTitle, "XXContent :", localContent);
-
   const submitForm: SubmitHandler<Blog> = (data) => {
     onSubmit(data);
+    reset();
   };
 
   return (

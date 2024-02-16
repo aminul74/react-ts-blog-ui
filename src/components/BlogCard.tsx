@@ -11,21 +11,22 @@ interface BlogCardProps {
   blogs: Blog[];
   totalCount: number;
   isLoading: boolean;
-  isMyBlog?: boolean;
+  isMyBlogsPage?: boolean;
 }
 
 const BlogCard: React.FC<BlogCardProps> = ({
   blogs,
   totalCount,
   isLoading,
-  isMyBlog,
+  isMyBlogsPage,
 }) => {
   // console.log("TOTALCOUNT", blogs);
   const navigate = useNavigate();
   const { pageNumber, setPageNumber, myBlogPageNumber, setMyBlogPageNumber } =
     useBlogContext();
-  const changePage = (data: { selected: number }) => {
-    if (isMyBlog) {
+
+  const changePage = (data: { selected: number }): void => {
+    if (isMyBlogsPage) {
       setMyBlogPageNumber(data.selected);
     } else {
       setPageNumber(data.selected);
@@ -38,11 +39,11 @@ const BlogCard: React.FC<BlogCardProps> = ({
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-2xl lg:mx-0">
           <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-            {isMyBlog ? "My Blogs" : "Publish your passions, your way"}
+            {isMyBlogsPage ? "My Blogs" : "Publish your passions, your way"}
           </h2>
 
           <p className="mt-2 text-lg leading-8 text-gray-600">
-            {isMyBlog
+            {isMyBlogsPage
               ? `Total blogs: ${totalCount}`
               : "Create a unique and beautiful blog easily."}
           </p>
@@ -108,7 +109,7 @@ const BlogCard: React.FC<BlogCardProps> = ({
       </div>
       <div>
         <Paginate
-          pageNumber={isMyBlog ? myBlogPageNumber : pageNumber}
+          pageNumber={isMyBlogsPage ? myBlogPageNumber : pageNumber}
           totalCount={totalCount}
           changePage={changePage}
         />

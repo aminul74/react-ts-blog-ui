@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import UserForm from "../components/UserForm";
-import api, { ApiDataType } from "../utility/userApis";
+import api, { SignInProps } from "../utility/userApis";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contextApi/UseAuthContext";
 import { useMutation } from "@tanstack/react-query";
@@ -22,7 +22,7 @@ const Signup: React.FC = () => {
 
   const { mutate: signUpMutate } = useMutation({
     mutationKey: ["signUp"],
-    mutationFn: async (data: ApiDataType) => api.signUpFetch(data),
+    mutationFn: async (data: SignInProps) => api.signUpFetch(data),
     onError: (error: SignUpError ) => {
       setErrorMessage(error.response?.data[0].errMessage);
     },
@@ -35,7 +35,7 @@ const Signup: React.FC = () => {
     },
   });
 
-  const onSubmit: SubmitHandler<ApiDataType> = (data) => {
+  const onSubmit: SubmitHandler<SignInProps> = (data) => {
     signUpMutate(data);
   };
   return (

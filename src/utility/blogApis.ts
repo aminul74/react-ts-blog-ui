@@ -45,15 +45,20 @@ export interface FetchUserBlogsProps {
 
 // const USER_BLOG_URL = "http://localhost:4001/api/v1/blogs/my-blogs";
 
-const fetchBlogs = async ({ page, pageSize }: FetchBlogsProps) => {
-  // console.log("page :", page, "pageSize :", pageSize);
+const fetchBlogs = async ({
+  page,
+  pageSize,
+}: FetchBlogsProps): Promise<Blog[]> => {
   const response = await axios.get(
     `http://localhost:4001/api/v1/blogs?page=${page}&size=${pageSize}`
   );
   return response.data;
 };
 
-const createBlog = async ({ blog, token }: CreateBlogProps) => {
+const createBlog = async ({
+  blog,
+  token,
+}: CreateBlogProps): Promise<Blog[]> => {
   const response = await axios.post(
     "http://localhost:4001/api/v1/blogs/create",
     blog,
@@ -68,7 +73,10 @@ const createBlog = async ({ blog, token }: CreateBlogProps) => {
   return response.data;
 };
 
-const fetchSingleBlog = async ({ uuId, token }: FetchSingleBlogProps) => {
+const fetchSingleBlog = async ({
+  uuId,
+  token,
+}: FetchSingleBlogProps): Promise<Blog[]> => {
   const response = await axios.get(
     `http://localhost:4001/api/v1/blogs/${uuId}`,
     {
@@ -78,34 +86,48 @@ const fetchSingleBlog = async ({ uuId, token }: FetchSingleBlogProps) => {
       },
     }
   );
-
   return response.data ? response.data[0] : [];
 };
 
-const updateBlog = async ({ uuId, updatedBlog, token }: UpdateBlogProps) => {
-  await axios.put(`http://localhost:4001/api/v1/blogs/${uuId}`, updatedBlog, {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-  });
+const updateBlog = async ({
+  uuId,
+  updatedBlog,
+  token,
+}: UpdateBlogProps): Promise<Blog[]> => {
+  const response = await axios.put(
+    `http://localhost:4001/api/v1/blogs/${uuId}`,
+    updatedBlog,
+    {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return response.data;
 };
 
-const deleteBlog = async ({ uuId, token }: DeleteBlogProps) => {
-  await axios.delete(`http://localhost:4001/api/v1/blogs/${uuId}`, {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-  });
+const deleteBlog = async ({
+  uuId,
+  token,
+}: DeleteBlogProps): Promise<{ Message: string }> => {
+  const response = await axios.delete(
+    `http://localhost:4001/api/v1/blogs/${uuId}`,
+    {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return response.data;
 };
 
 const fetchUserBlogs = async ({
   token,
   page,
   pageSize,
-}: FetchUserBlogsProps) => {
-  // console.log("API :", token, "page :", page, "pageSize :", pageSize);
+}: FetchUserBlogsProps): Promise<Blog[]> => {
   const response = await axios.get(
     `http://localhost:4001/api/v1/blogs/my-blogs?page=${page}&size=${pageSize}`,
     {

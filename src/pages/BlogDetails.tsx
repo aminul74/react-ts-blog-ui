@@ -5,13 +5,14 @@ import {
   useMutation,
   MutationKey,
   useQueryClient,
+  UseQueryResult,
+  UseMutationResult,
 } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { useAuth } from "../contextApi/UseAuthContext";
-import api from "../utility/blogApis";
+import api, { Blog } from "../utility/blogApis";
 import { useParams, useNavigate } from "react-router-dom";
 import { dateFormatter } from "../utility/tools";
-import { Blog } from "../utility/blogApis";
 import Button from "../components/Button";
 import ActionButton from "../components/ActionButton";
 import Modal from "../components/Modal";
@@ -33,26 +34,29 @@ const BlogDetails: React.FC = () => {
   const blogUpdateKey: MutationKey = ["updateBlog", uuid, token];
   const blogDeleteKey: MutationKey = ["deleteBlog", uuid];
 
-  const { data: blog, isLoading } = useQuery({
+  const { data: blog, isLoading }: UseQueryResult<Blog> = useQuery({
     queryKey: blogQueryKey,
     queryFn: async () => api.fetchSingleBlog({ uuId: uuid, token: token }),
     staleTime: 16000,
   });
 
-  const { mutate: updateBlogMutate } = useMutation({
-    mutationKey: blogUpdateKey,
-    mutationFn: async (blog: Blog) =>
-      await api.updateBlog({ uuId: uuid, updatedBlog: blog, token: token }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["blog"] });
-      toast.success("Your Blog Update Successfully !", {
-        autoClose: 1000,
-      });
-      setModal(false);
-    },
-  });
+  const { mutate: updateBlogMutate }: UseMutationResult<Blog[], Error, Blog> =
+    useMutation({
+      mutationKey: blogUpdateKey,
+      mutationFn: async (blog: Blog) =>
+        await api.updateBlog({ uuId: uuid, updatedBlog: blog, token: token }),
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ["blog"] });
+        toast.success("Your Blog Update Successfully !", {
+          autoClose: 1000,
+        });
+        setModal(false);
+      },
+    });
 
-  const { mutate: deleteBlogMutate } = useMutation({
+  const {
+    mutate: deleteBlogMutate,
+  }: UseMutationResult<{ Message: string }, Error> = useMutation({
     mutationKey: blogDeleteKey,
     mutationFn: async () => await api.deleteBlog({ uuId: uuid, token: token }),
     onSuccess: () => {
@@ -69,19 +73,21 @@ const BlogDetails: React.FC = () => {
   };
 
   const handleDeleteClick = () => {
-    deleteBlogMutate();
+    deleteBlogMutate({ uuId: uuid, token: token });
   };
 
   return (
     <div className="bg-white min-h-screen py-16 p-5 sm:py-20">
-      <LoadingSpinner isLoading={isLoading} hasData={Boolean(blog)} />
+      <LoadingSpinner isLoading={isLoading} hasData={!!blog} />
       <div className="flex justify-between items-center mb-4 mt-2">
         <div>
           <Button
             type="button"
             className="text-sm text-black hover:text-green-600 bg-white hover:bg-slate-100 border border-slate-200 font-medium px-4 py-2 inline-flex space-x-1 items-center"
             onClick={() =>
-              myBlogPageNumber ? navigate(`/user/${user?.id}`) : navigate("/blogs")
+              myBlogPageNumber
+                ? navigate(`/user/${user?.id}`)
+                : navigate("/blogs")
             }
           >
             <span>&#8592; Go back</span>

@@ -13,8 +13,7 @@ const Navbar: React.FC = () => {
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       dropdownRef.current
-        ? !dropdownRef.current.contains(event.target as Node) &&
-        setOpen(false)
+        ? !dropdownRef.current.contains(event.target as Node) && setOpen(false)
         : null;
     };
     document.addEventListener("mousedown", handleClickOutside);
@@ -22,7 +21,7 @@ const Navbar: React.FC = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-  
+
   return (
     <header
       className={`flex items-center bg-indigo-900 dark:bg-dark fixed top-0 left-0 w-full z-50`}

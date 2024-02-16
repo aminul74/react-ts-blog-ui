@@ -5,9 +5,7 @@ interface FloatButtonProps {
   onClick?: () => void;
 }
 
-const FloatButton: React.FC<FloatButtonProps> = ({
-  onClick,
-}: FloatButtonProps) => {
+const FloatButton: React.FC<FloatButtonProps> = ({ onClick }) => {
   return (
     <div className="p-10">
       <Button

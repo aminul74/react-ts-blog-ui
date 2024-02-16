@@ -2,12 +2,12 @@ import React from "react";
 import { toast } from "react-toastify";
 import UserUpdatePasswordForm from "../components/UserUpdateForm";
 import Button from "../components/Button";
-import api, { ApiDataType } from "../utility/userApis";
+import api, { DeleteUserProps } from "../utility/userApis";
 import { MutationKey, useMutation } from "@tanstack/react-query";
 import { useAuth } from "../contextApi/UseAuthContext";
 import { useNavigate } from "react-router-dom";
 
-const UserProfile: React.FC<ApiDataType> = () => {
+const UserProfile: React.FC<DeleteUserProps> = () => {
   const navigate = useNavigate();
   const { token, user } = useAuth();
   const deleteUserKey: MutationKey = ["deleteUser", token, user?.id];
@@ -15,7 +15,7 @@ const UserProfile: React.FC<ApiDataType> = () => {
   const { mutate: deleteUserMutate } = useMutation({
     mutationKey: deleteUserKey,
     mutationFn: async () => {
-      api.deleteUser({ token: token, userId: user?.id } as ApiDataType);
+      api.deleteUser({ token: token, userId: user?.id } as DeleteUserProps);
     },
     onSuccess: () => {
       toast.error("Your Account Removed", {

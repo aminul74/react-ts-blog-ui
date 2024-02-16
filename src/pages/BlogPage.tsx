@@ -10,7 +10,7 @@ import {
   UseMutationResult,
   MutationKey,
 } from "@tanstack/react-query";
-import api, { CreateBlogProps, Blog } from "../utility/blogApis";
+import api, { Blog } from "../utility/blogApis";
 import { useBlogContext } from "../contextApi/UseBlogContext";
 import { useNavigate } from "react-router-dom";
 import Modal from "../components/Modal";
@@ -30,8 +30,8 @@ const BlogPage: React.FC = () => {
   const queryKey: QueryKey = ["blogs", nextPage, blogPerPage];
   const mutationKey: MutationKey = ["createBlog", token];
 
-  const { data, isLoading }: UseQueryResult<CreateBlogProps> = useQuery({
-    queryKey,
+  const { data, isLoading }: UseQueryResult<Blog> = useQuery({
+    queryKey: queryKey,
     queryFn: async () =>
       await api.fetchBlogs({ page: nextPage, pageSize: blogPerPage }),
     staleTime: 16000,

@@ -9,7 +9,7 @@ type ButtonPropsType = {
 };
 
 const Button: React.FC<ButtonPropsType> = ({
-  type,
+  type = "button",
   children,
   className,
   id,

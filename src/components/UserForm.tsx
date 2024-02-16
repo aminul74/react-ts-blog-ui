@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import InputField from "./InputField";
 import Button from "./Button";
-import { ApiDataType } from "../utility/userApis";
+import { SignInProps, SignUpProps } from "../utility/userApis";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { signUpSchema } from "../utility/userFormValidation";
@@ -11,7 +11,7 @@ type UserFormProps = {
   isSignIn: boolean;
   isSignUp: boolean;
   errorMessage: string | null;
-  onSubmit: SubmitHandler<ApiDataType>;
+  onSubmit: SubmitHandler<SignInProps | SignUpProps>;
   setErrorMessage: (erorMessage: string | null) => void;
 };
 
@@ -27,7 +27,7 @@ const UserForm: React.FC<UserFormProps> = ({
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<ApiDataType>({
+  } = useForm<SignInProps | SignUpProps>({
     resolver: yupResolver(schema) as never,
   });
 
@@ -39,6 +39,7 @@ const UserForm: React.FC<UserFormProps> = ({
       clearTimeout(timeoutId);
     };
   }, [errorMessage, setErrorMessage]);
+
   return (
     <>
       <div className="flex items-center justify-center h-full min-w-screen">

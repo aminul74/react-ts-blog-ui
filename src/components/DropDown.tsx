@@ -26,7 +26,7 @@ const UserProfileDropdown: React.FC<DropDownProps> = () => {
   };
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      dropdownRef.current
+      dropdownRef.current 
         ? !dropdownRef.current.contains(event.target as Node) &&
           setDropdownOpen(false)
         : null;

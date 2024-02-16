@@ -5,7 +5,7 @@ type InpuFieldProps = {
   label: string;
   id: string;
   name: string;
-  type: string;
+  type: "text" | "password" | "email" | "number";
   autoComplete: string;
   placeholder: string;
   required: boolean;
