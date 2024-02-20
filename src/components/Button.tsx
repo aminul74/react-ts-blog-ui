@@ -6,6 +6,7 @@ type ButtonPropsType = {
   className?: string;
   onClick?: () => void;
   id?: string;
+  dataTestId?: string;
 };
 
 const Button: React.FC<ButtonPropsType> = ({
@@ -14,9 +15,10 @@ const Button: React.FC<ButtonPropsType> = ({
   className,
   id,
   onClick,
+  dataTestId
 }) => {
   return (
-    <button id={id} type={type} className={className} onClick={onClick}>
+    <button id={id} type={type} className={className} onClick={onClick} data-testid={dataTestId}>
       {children}
     </button>
   );

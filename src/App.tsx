@@ -11,7 +11,7 @@ import BlogDetails from "./pages/BlogDetails";
 import ProfilePage from "./pages/ProfilePage";
 import MyBlogPage from "./pages/MyBlogPage";
 
-function App() {
+const App: React.FC = () => {
   return (
     <Router>
       <Header />
