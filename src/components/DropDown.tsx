@@ -8,8 +8,11 @@ import { useNavigate } from "react-router-dom";
 interface DropDownProps {
   userLabel?: string;
   userEmail?: string;
+  dataTestId?: string;
+  onClick?: () => void;
+  type?: "button";
 }
-const UserProfileDropdown: React.FC<DropDownProps> = () => {
+const UserProfileDropdown: React.FC<DropDownProps> = ({ dataTestId }) => {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
   const userEmail = user?.email;
@@ -26,7 +29,7 @@ const UserProfileDropdown: React.FC<DropDownProps> = () => {
   };
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      dropdownRef.current 
+      dropdownRef.current
         ? !dropdownRef.current.contains(event.target as Node) &&
           setDropdownOpen(false)
         : null;
@@ -39,7 +42,7 @@ const UserProfileDropdown: React.FC<DropDownProps> = () => {
   }, []);
 
   return (
-    <div className="relative mb-5" ref={dropdownRef}>
+    <div className="relative mb-5" ref={dropdownRef} data-testid={dataTestId}>
       <Button
         id="dropdownAvatarNameButton"
         data-dropdown-toggle="dropdownAvatarName"
@@ -119,21 +122,24 @@ const UserProfileDropdown: React.FC<DropDownProps> = () => {
               setAlert(true), navigate("/signin");
             }}
             className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white w-full text-start"
+            data-testid={dataTestId}
           >
             Sign out
           </Button>
         </div>
         {isAlert && (
-          <ConfirmAlert
-            isOpen={isAlert}
-            onClose={() => {
-              setAlert(false);
-              setDropdownOpen(false);
-            }}
-            onConfirm={handleLogout}
-            title="Logout ?"
-            message="Are you sure you would like to Logout?"
-          />
+          <div data-testid={dataTestId}>
+            <ConfirmAlert
+              isOpen={isAlert}
+              onClose={() => {
+                setAlert(false);
+                setDropdownOpen(false);
+              }}
+              onConfirm={handleLogout}
+              title="Logout ?"
+              message="Are you sure you would like to Logout?"
+            />
+          </div>
         )}
       </div>
     </div>
