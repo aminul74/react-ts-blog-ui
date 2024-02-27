@@ -9,8 +9,9 @@ import { Blog } from "../utility/blogApis";
 interface BlogFormProps {
   onSubmit: SubmitHandler<Blog>;
   blog?: Blog | null | undefined;
+  dataTestId?: string;
 }
-const BlogForm: React.FC<BlogFormProps> = ({ blog, onSubmit }) => {
+const BlogForm: React.FC<BlogFormProps> = ({ blog, onSubmit, dataTestId }) => {
   const {
     handleSubmit,
     register,
@@ -66,12 +67,14 @@ const BlogForm: React.FC<BlogFormProps> = ({ blog, onSubmit }) => {
         />
         <p className="text-red-500">{errors.content?.message}</p>
       </div>
-      <Button
-        type="submit"
-        className="text-white font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-indigo-800 dark:hover:bg-indigo-900"
-      >
-        Submit
-      </Button>
+      <div data-testid={dataTestId}>
+        <Button
+          type="submit"
+          className="text-white font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-indigo-800 dark:hover:bg-indigo-900"
+        >
+          Submit
+        </Button>
+      </div>
     </form>
   );
 };

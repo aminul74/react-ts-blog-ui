@@ -5,7 +5,11 @@ import { useAuth } from "../contextApi/UseAuthContext";
 import Button from "./Button";
 import { Link } from "react-router-dom";
 
-const Navbar: React.FC = () => {
+interface NavbarProps {
+  dataTestId?: string;
+}
+
+const Navbar: React.FC<NavbarProps> = ({ dataTestId }) => {
   const [open, setOpen] = useState<boolean>(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const { token } = useAuth();
@@ -83,7 +87,10 @@ const Navbar: React.FC = () => {
               </div>
             )}
             {token && (
-              <div className="hidden lg:flex justify-center mt-2">
+              <div
+                className="hidden lg:flex justify-center mt-2"
+                data-testid={dataTestId}
+              >
                 <DropDown />
               </div>
             )}

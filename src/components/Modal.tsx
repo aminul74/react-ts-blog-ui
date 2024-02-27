@@ -6,6 +6,7 @@ interface ModalProps {
   isOpen?: boolean;
   onClose?: () => void;
   children?: ReactNode;
+  dataTestId?: string;
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -13,12 +14,14 @@ const Modal: React.FC<ModalProps> = ({
   isOpen,
   onClose,
   children,
+  dataTestId,
 }: ModalProps) => {
   return (
     <div
       className={`fixed left-0 top-0 z-50 ${
         isOpen ? "" : "hidden"
       } h-full w-full overflow-y-auto overflow-x-hidden backdrop-blur-md backdrop-filter backdrop-contrast-120 outline-none`}
+      data-testid={dataTestId}
     >
       <div className="relative w-auto mx-auto mt-36 max-w-[500px]">
         <div className="shadow-[0_0.5rem_1rem_rgba(#000, 0.15)] relative flex flex-col rounded-md bg-gray-800">
@@ -37,7 +40,7 @@ const Modal: React.FC<ModalProps> = ({
               onClick={onClose}
             >
               Close
-            </Button> 
+            </Button>
           </div>
         </div>
       </div>

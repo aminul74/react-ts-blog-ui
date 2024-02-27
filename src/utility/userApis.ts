@@ -13,7 +13,7 @@ export interface SignInProps {
 
 export interface SignUpProps {
   username: string;
-  email: string;
+  email?: string;
   password: string;
   confirmPassword?: string;
 }

@@ -2,6 +2,7 @@ import React, { createContext, useState, SetStateAction } from "react";
 import axios, { AxiosResponse } from "axios";
 
 export interface UserType {
+  length: number;
   id: string;
   username: string;
   email: string;

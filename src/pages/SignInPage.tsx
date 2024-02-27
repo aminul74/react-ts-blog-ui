@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contextApi/UseAuthContext";
 import { SubmitHandler } from "react-hook-form";
 
-type SignInError  = {
+type SignInError = {
   response: {
     data: {
       errMessage: string;
@@ -14,7 +14,8 @@ type SignInError  = {
   };
 };
 
-const SignIn: React.FC = () => {
+const SignIn: React.FC<{ dataTestId?: string }> = ({ dataTestId }) => {
+  // console.log("XXXX", dataTestId);
   const [isSignIn] = useState<boolean>(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const navigate = useNavigate();
@@ -23,7 +24,7 @@ const SignIn: React.FC = () => {
   const { mutate: signInMutate } = useMutation({
     mutationKey: ["signIn"],
     mutationFn: async (data: SignInProps) => api.signInFetch(data),
-    onError: (error: SignInError ) => {
+    onError: (error: SignInError) => {
       setErrorMessage(error.response?.data[0].errMessage);
     },
     onSuccess: async (data) => {
@@ -40,16 +41,14 @@ const SignIn: React.FC = () => {
     signInMutate(data);
   };
   return (
-    <div>
-      <div className="bg-gray-900 h-screen">
-        <UserForm
-          isSignIn={isSignIn}
-          isSignUp={false}
-          errorMessage={errorMessage}
-          setErrorMessage={setErrorMessage}
-          onSubmit={onSubmit}
-        />
-      </div>
+    <div className="bg-gray-900 h-screen" data-testid={dataTestId}>
+      <UserForm
+        isSignIn={isSignIn}
+        isSignUp={false}
+        errorMessage={errorMessage}
+        setErrorMessage={setErrorMessage}
+        onSubmit={onSubmit}
+      />
     </div>
   );
 };

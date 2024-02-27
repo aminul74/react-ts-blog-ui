@@ -12,6 +12,7 @@ interface BlogCardProps {
   totalCount: number;
   isLoading: boolean;
   isMyBlogsPage?: boolean;
+  dataTestId?: string;
 }
 
 const BlogCard: React.FC<BlogCardProps> = ({
@@ -19,8 +20,8 @@ const BlogCard: React.FC<BlogCardProps> = ({
   totalCount,
   isLoading,
   isMyBlogsPage,
+  dataTestId,
 }) => {
-  // console.log("TOTALCOUNT", blogs);
   const navigate = useNavigate();
   const { pageNumber, setPageNumber, myBlogPageNumber, setMyBlogPageNumber } =
     useBlogContext();
@@ -34,8 +35,10 @@ const BlogCard: React.FC<BlogCardProps> = ({
   };
 
   return (
-    <div className="bg-white py-24 sm:py-32 min-h-screen">
-      <LoadingSpinner isLoading={isLoading} hasData={true} />
+    <div role="card" className="bg-white py-24 sm:py-32 min-h-screen">
+      <div data-testid={dataTestId}>
+        <LoadingSpinner isLoading={isLoading} hasData={true} />
+      </div>
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-2xl lg:mx-0">
           <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
