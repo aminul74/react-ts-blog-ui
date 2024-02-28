@@ -18,7 +18,11 @@ import BlogForm from "../components/BlogForm";
 import { useAuth } from "../contextApi/UseAuthContext";
 import { toast } from "react-toastify";
 
-const BlogPage: React.FC = () => {
+interface BlogPageProps {
+  dataTestId?: string;
+}
+
+const BlogPage: React.FC<BlogPageProps> = ({ dataTestId }) => {
   const [openModal, setOpenModal] = useState<boolean>(false);
   const { token } = useAuth();
   const queryClient = useQueryClient();
@@ -30,15 +34,15 @@ const BlogPage: React.FC = () => {
   const queryKey: QueryKey = ["blogs", nextPage, blogPerPage];
   const mutationKey: MutationKey = ["createBlog", token];
 
-  const { data, isLoading }: UseQueryResult<Blog> = useQuery({
+  const { data, isLoading }: UseQueryResult<[Blog[], number]> = useQuery({
     queryKey: queryKey,
     queryFn: async () =>
       await api.fetchBlogs({ page: nextPage, pageSize: blogPerPage }),
     staleTime: 16000,
   });
-
-  const blogs: Blog[] = data ? data[0] : [];
-  const totalCount: number = data ? data[1] : [];
+  const [blogs, totalCount]: [Blog[], number] = data || [[], 0];
+  // const blogs: Blog[] = data ? data[0] : [];
+  // const totalCount: number = data ? data[1] : [];
 
   const { mutate: createBlogMutate }: UseMutationResult<void, Error, Blog> =
     useMutation({
@@ -58,7 +62,7 @@ const BlogPage: React.FC = () => {
     createBlogMutate(blog);
   };
   return (
-    <div>
+    <div data-testid={dataTestId}>
       <div>
         <BlogCard blogs={blogs} totalCount={totalCount} isLoading={isLoading} />
       </div>

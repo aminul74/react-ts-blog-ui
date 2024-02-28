@@ -21,7 +21,11 @@ import ConfirmAlert from "../components/ConfirmAlert";
 import LoadingSpinner from "../components/LoadSpinner";
 import { useBlogContext } from "../contextApi/UseBlogContext";
 
-const BlogDetails: React.FC = () => {
+interface BlogDetailsProps {
+  dataTestId?: string;
+}
+
+const BlogDetails: React.FC<BlogDetailsProps> = ({ dataTestId }) => {
   const [isModal, setModal] = useState<boolean>(false);
   const [isAlert, setAlert] = useState<boolean>(false);
   const { token, user } = useAuth();
@@ -77,7 +81,10 @@ const BlogDetails: React.FC = () => {
   };
 
   return (
-    <div className="bg-white min-h-screen py-16 p-5 sm:py-20">
+    <div
+      className="bg-white min-h-screen py-16 p-5 sm:py-20"
+      data-testid={dataTestId}
+    >
       <LoadingSpinner isLoading={isLoading} hasData={!!blog} />
       <div className="flex justify-between items-center mb-4 mt-2">
         <div>
@@ -96,13 +103,16 @@ const BlogDetails: React.FC = () => {
 
         {user && blog && user.id === blog.authorId ? (
           <div className="inline-flex items-center shadow-sm">
-            <ActionButton type="edit" onClick={() => setModal(true)}>
-              Edit
-            </ActionButton>
-
-            <ActionButton type="delete" onClick={() => setAlert(true)}>
-              Delete
-            </ActionButton>
+            <div data-testid={dataTestId}>
+              <ActionButton type="edit" onClick={() => setModal(true)}>
+                Edit
+              </ActionButton>
+            </div>
+            <div data-testid={dataTestId}>
+              <ActionButton type="delete" onClick={() => setAlert(true)}>
+                Delete
+              </ActionButton>
+            </div>
           </div>
         ) : null}
       </div>

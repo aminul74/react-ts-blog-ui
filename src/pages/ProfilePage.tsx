@@ -7,9 +7,16 @@ import { MutationKey, useMutation } from "@tanstack/react-query";
 import { useAuth } from "../contextApi/UseAuthContext";
 import { useNavigate } from "react-router-dom";
 
-const UserProfile: React.FC<DeleteUserProps> = () => {
+interface UserProfileProps {
+  dataTestId?: string;
+}
+
+const UserProfile: React.FC<DeleteUserProps & UserProfileProps> = ({
+  dataTestId,
+}) => {
   const navigate = useNavigate();
   const { token, user } = useAuth();
+  console.log("USERXXXXX", user);
   const deleteUserKey: MutationKey = ["deleteUser", token, user?.id];
 
   const { mutate: deleteUserMutate } = useMutation({
@@ -26,7 +33,7 @@ const UserProfile: React.FC<DeleteUserProps> = () => {
     },
   });
   return (
-    <div className="bg-gray-900 h-screen p-2">
+    <div className="bg-gray-900 h-screen p-2" data-testid={dataTestId}>
       <div className="p-4 shadow bg-gray-800 mx-auto mt-24 max-w-3xl">
         <div className="grid grid-cols-1 md:grid-cols-3">
           <div className="grid grid-cols-3 text-center order-last md:order-first md:mt-0">
@@ -42,6 +49,7 @@ const UserProfile: React.FC<DeleteUserProps> = () => {
               type="button"
               className="text-white py-2 px-4 uppercase rounded bg-red-400 hover:bg-red-500 shadow hover:shadow-lg font-medium transition transform hover:-translate-y-0.5"
               onClick={() => deleteUserMutate()}
+              data-testid={dataTestId}
             >
               Delete Account
             </Button>
@@ -54,6 +62,9 @@ const UserProfile: React.FC<DeleteUserProps> = () => {
               old_password=""
               new_password=""
               confirmPassword=""
+              token={null}
+              userId={null}
+              data-testid={dataTestId}
             />
           </div>
         </div>

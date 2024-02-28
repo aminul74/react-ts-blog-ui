@@ -14,8 +14,7 @@ type SignInError = {
   };
 };
 
-const SignIn: React.FC<{ dataTestId?: string }> = ({ dataTestId }) => {
-  // console.log("XXXX", dataTestId);
+const SignIn: React.FC<{dataTestId?: string}>= ({dataTestId}) => {
   const [isSignIn] = useState<boolean>(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const navigate = useNavigate();
@@ -41,15 +40,15 @@ const SignIn: React.FC<{ dataTestId?: string }> = ({ dataTestId }) => {
     signInMutate(data);
   };
   return (
-    <div className="bg-gray-900 h-screen" data-testid={dataTestId}>
-      <UserForm
-        isSignIn={isSignIn}
-        isSignUp={false}
-        errorMessage={errorMessage}
-        setErrorMessage={setErrorMessage}
-        onSubmit={onSubmit}
-      />
-    </div>
+      <div className="bg-gray-900 h-screen" data-testid={dataTestId}>
+        <UserForm
+          isSignIn={isSignIn}
+          isSignUp={false}
+          errorMessage={errorMessage}
+          setErrorMessage={setErrorMessage}
+          onSubmit={onSubmit}
+        />
+      </div>
   );
 };
 

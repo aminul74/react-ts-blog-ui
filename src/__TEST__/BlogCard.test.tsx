@@ -12,9 +12,9 @@ jest.mock("../contextApi/UseBlogContext", () => ({
 const blogs = [
   {
     id: "1",
-    title: "Sample Blog 1",
-    content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    createdAt: "2023-01-01T12:00:00Z",
+    title: "Test Blog",
+    content: "Test Content",
+    createdAt: "28 Feb 2024",
     authorId: "author1",
     User: { username: "testuser1" },
   },
